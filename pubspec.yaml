@@ -1,0 +1,16 @@
+name: wave
+description: Widget for displaying a wave.
+version: 0.0.1
+author: Yan Wong <flutter_wave@wong.so>
+homepage: https://wong.so/
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
