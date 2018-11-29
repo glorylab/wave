@@ -1,5 +1,5 @@
 # CHANGELOG
 
-## 0.0.1
+## 0.0.4
 
 * Widget for displaying a wave.

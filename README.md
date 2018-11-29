@@ -1,9 +1,17 @@
 # wave
 
-Widget for displaying a wave.
+[![pub package](https://img.shields.io/pub/v/wave.svg)](https://pub.dartlang.org/packages/wave)
+
+Widget for displaying a wave, with custom duration, size, color, alpha and so on.
 
 ## Getting Started
 
-For help getting started with Flutter, view our online [documentation](https://flutter.io/).
+``` dart
+    Wave(
+        height: 128,
+        duration: 1024,
+        color: Colors.blue,
+    ),
+```
 
-For help on editing package code, view the [documentation](https://flutter.io/developing-packages/).
+![demo](assets/demo.gif)

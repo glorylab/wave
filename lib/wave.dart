@@ -116,7 +116,7 @@ class WaveState extends State<Wave> with SingleTickerProviderStateMixin {
                           widget.color.red,
                           widget.color.green,
                           widget.color.blue,
-                          widget.bottomAlpha * _controller.value),
+                          0.6 + 0.4 * (widget.bottomAlpha * _controller.value)),
                     ]),
               ),
             ),
