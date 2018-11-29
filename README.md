@@ -14,4 +14,4 @@ Widget for displaying a wave, with custom duration, size, color, alpha and so on
     ),
 ```
 
-![demo](assets/demo.gif)
+![demo](example/assets/demo.gif)
