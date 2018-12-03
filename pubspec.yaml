@@ -1,6 +1,6 @@
 name: wave
 description: Widget for displaying a wave, with custom duration, size, color, alpha and so on.
-version: 0.0.4
+version: 0.0.5
 author: Yan Wong <flutter_wave@wong.so>
 homepage: https://github.com/TheProtoss/wave
 

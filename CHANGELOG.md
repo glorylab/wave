@@ -1,5 +1,5 @@
 # CHANGELOG
 
-## 0.0.4
+## 0.0.5
 
-* Widget for displaying a wave.
+* Widget for displaying a wave. Added options for custom waves and remove the image from [WaveView](https://github.com/While1true/WaveView_flutter).

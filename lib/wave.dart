@@ -1,182 +1,457 @@
-library wave;
+//                                Apache License
+//                          Version 2.0, January 2004
+//                       http://www.apache.org/licenses/
+//
+//  TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+//
+//  1. Definitions.
+//
+//     "License" shall mean the terms and conditions for use, reproduction,
+//     and distribution as defined by Sections 1 through 9 of this document.
+//
+//     "Licensor" shall mean the copyright owner or entity authorized by
+//     the copyright owner that is granting the License.
+//
+//     "Legal Entity" shall mean the union of the acting entity and all
+//     other entities that control, are controlled by, or are under common
+//     control with that entity. For the purposes of this definition,
+//     "control" means (i) the power, direct or indirect, to cause the
+//     direction or management of such entity, whether by contract or
+//     otherwise, or (ii) ownership of fifty percent (50%) or more of the
+//     outstanding shares, or (iii) beneficial ownership of such entity.
+//
+//     "You" (or "Your") shall mean an individual or Legal Entity
+//     exercising permissions granted by this License.
+//
+//     "Source" form shall mean the preferred form for making modifications,
+//     including but not limited to software source code, documentation
+//     source, and configuration files.
+//
+//     "Object" form shall mean any form resulting from mechanical
+//     transformation or translation of a Source form, including but
+//     not limited to compiled object code, generated documentation,
+//     and conversions to other media types.
+//
+//     "Work" shall mean the work of authorship, whether in Source or
+//     Object form, made available under the License, as indicated by a
+//     copyright notice that is included in or attached to the work
+//     (an example is provided in the Appendix below).
+//
+//     "Derivative Works" shall mean any work, whether in Source or Object
+//     form, that is based on (or derived from) the Work and for which the
+//     editorial revisions, annotations, elaborations, or other modifications
+//     represent, as a whole, an original work of authorship. For the purposes
+//     of this License, Derivative Works shall not include works that remain
+//     separable from, or merely link (or bind by name) to the interfaces of,
+//     the Work and Derivative Works thereof.
+//
+//     "Contribution" shall mean any work of authorship, including
+//     the original version of the Work and any modifications or additions
+//     to that Work or Derivative Works thereof, that is intentionally
+//     submitted to Licensor for inclusion in the Work by the copyright owner
+//     or by an individual or Legal Entity authorized to submit on behalf of
+//     the copyright owner. For the purposes of this definition, "submitted"
+//     means any form of electronic, verbal, or written communication sent
+//     to the Licensor or its representatives, including but not limited to
+//     communication on electronic mailing lists, source code control systems,
+//     and issue tracking systems that are managed by, or on behalf of, the
+//     Licensor for the purpose of discussing and improving the Work, but
+//     excluding communication that is conspicuously marked or otherwise
+//     designated in writing by the copyright owner as "Not a Contribution."
+//
+//     "Contributor" shall mean Licensor and any individual or Legal Entity
+//     on behalf of whom a Contribution has been received by Licensor and
+//     subsequently incorporated within the Work.
+//
+//  2. Grant of Copyright License. Subject to the terms and conditions of
+//     this License, each Contributor hereby grants to You a perpetual,
+//     worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+//     copyright license to reproduce, prepare Derivative Works of,
+//     publicly display, publicly perform, sublicense, and distribute the
+//     Work and such Derivative Works in Source or Object form.
+//
+//  3. Grant of Patent License. Subject to the terms and conditions of
+//     this License, each Contributor hereby grants to You a perpetual,
+//     worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+//     (except as stated in this section) patent license to make, have made,
+//     use, offer to sell, sell, import, and otherwise transfer the Work,
+//     where such license applies only to those patent claims licensable
+//     by such Contributor that are necessarily infringed by their
+//     Contribution(s) alone or by combination of their Contribution(s)
+//     with the Work to which such Contribution(s) was submitted. If You
+//     institute patent litigation against any entity (including a
+//     cross-claim or counterclaim in a lawsuit) alleging that the Work
+//     or a Contribution incorporated within the Work constitutes direct
+//     or contributory patent infringement, then any patent licenses
+//     granted to You under this License for that Work shall terminate
+//     as of the date such litigation is filed.
+//
+//  4. Redistribution. You may reproduce and distribute copies of the
+//     Work or Derivative Works thereof in any medium, with or without
+//     modifications, and in Source or Object form, provided that You
+//     meet the following conditions:
+//
+//     (a) You must give any other recipients of the Work or
+//         Derivative Works a copy of this License; and
+//
+//     (b) You must cause any modified files to carry prominent notices
+//         stating that You changed the files; and
+//
+//     (c) You must retain, in the Source form of any Derivative Works
+//         that You distribute, all copyright, patent, trademark, and
+//         attribution notices from the Source form of the Work,
+//         excluding those notices that do not pertain to any part of
+//         the Derivative Works; and
+//
+//     (d) If the Work includes a "NOTICE" text file as part of its
+//         distribution, then any Derivative Works that You distribute must
+//         include a readable copy of the attribution notices contained
+//         within such NOTICE file, excluding those notices that do not
+//         pertain to any part of the Derivative Works, in at least one
+//         of the following places: within a NOTICE text file distributed
+//         as part of the Derivative Works; within the Source form or
+//         documentation, if provided along with the Derivative Works; or,
+//         within a display generated by the Derivative Works, if and
+//         wherever such third-party notices normally appear. The contents
+//         of the NOTICE file are for informational purposes only and
+//         do not modify the License. You may add Your own attribution
+//         notices within Derivative Works that You distribute, alongside
+//         or as an addendum to the NOTICE text from the Work, provided
+//         that such additional attribution notices cannot be construed
+//         as modifying the License.
+//
+//     You may add Your own copyright statement to Your modifications and
+//     may provide additional or different license terms and conditions
+//     for use, reproduction, or distribution of Your modifications, or
+//     for any such Derivative Works as a whole, provided Your use,
+//     reproduction, and distribution of the Work otherwise complies with
+//     the conditions stated in this License.
+//
+//  5. Submission of Contributions. Unless You explicitly state otherwise,
+//     any Contribution intentionally submitted for inclusion in the Work
+//     by You to the Licensor shall be under the terms and conditions of
+//     this License, without any additional terms or conditions.
+//     Notwithstanding the above, nothing herein shall supersede or modify
+//     the terms of any separate license agreement you may have executed
+//     with Licensor regarding such Contributions.
+//
+//  6. Trademarks. This License does not grant permission to use the trade
+//     names, trademarks, service marks, or product names of the Licensor,
+//     except as required for reasonable and customary use in describing the
+//     origin of the Work and reproducing the content of the NOTICE file.
+//
+//  7. Disclaimer of Warranty. Unless required by applicable law or
+//     agreed to in writing, Licensor provides the Work (and each
+//     Contributor provides its Contributions) on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+//     implied, including, without limitation, any warranties or conditions
+//     of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+//     PARTICULAR PURPOSE. You are solely responsible for determining the
+//     appropriateness of using or redistributing the Work and assume any
+//     risks associated with Your exercise of permissions under this License.
+//
+//  8. Limitation of Liability. In no event and under no legal theory,
+//     whether in tort (including negligence), contract, or otherwise,
+//     unless required by applicable law (such as deliberate and grossly
+//     negligent acts) or agreed to in writing, shall any Contributor be
+//     liable to You for damages, including any direct, indirect, special,
+//     incidental, or consequential damages of any character arising as a
+//     result of this License or out of the use or inability to use the
+//     Work (including but not limited to damages for loss of goodwill,
+//     work stoppage, computer failure or malfunction, or any and all
+//     other commercial damages or losses), even if such Contributor
+//     has been advised of the possibility of such damages.
+//
+//  9. Accepting Warranty or Additional Liability. While redistributing
+//     the Work or Derivative Works thereof, You may choose to offer,
+//     and charge a fee for, acceptance of support, warranty, indemnity,
+//     or other liability obligations and/or rights consistent with this
+//     License. However, in accepting such obligations, You may act only
+//     on Your own behalf and on Your sole responsibility, not on behalf
+//     of any other Contributor, and only if You agree to indemnify,
+//     defend, and hold each Contributor harmless for any liability
+//     incurred by, or claims asserted against, such Contributor by reason
+//     of your accepting any such warranty or additional liability.
+//
+//  END OF TERMS AND CONDITIONS
+//
+//  APPENDIX: How to apply the Apache License to your work.
+//
+//     To apply the Apache License to your work, attach the following
+//     boilerplate notice, with the fields enclosed by brackets "[]"
+//     replaced with your own identifying information. (Don't include
+//     the brackets!)  The text should be enclosed in the appropriate
+//     comment syntax for the file format. We also recommend that a
+//     file or class name and description of purpose be included on the
+//     same "printed page" as the copyright notice for easier
+//     identification within third-party archives.
+//
+//  Copyright [2018] [While1true]
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
-class DefaultConfig {
-  static const int duration = 1000;
-  static const double height = 128.0;
-  static const double topAlpha = 0.6;
-  static const double bottomAlpha = 1.0;
-  static const Color color = /* blue */ Color(0xFF2196F3);
-  static const Color backgroundColor = /* white */ Color(0xFFFFFF);
-  static const Curve curve = Curves.fastOutSlowIn;
+enum ColorMode {
+  /// Waves with *single* **color** but different **alpha** and **amplitude**.
+  single,
+
+  /// Waves using *random* **color**, **alpha** and **amplitude**.
+  random,
+
+  /// Waves' colors must be set, and [colors]'s length must equal with [layers]
+  custom,
 }
 
-class Wave extends StatefulWidget {
-  /// Duration(milliseconds) of wave's animation.
+class WaveWidget extends StatefulWidget {
+  final Size size;
+  final double waveAmplitude;
+  final double wavePhase;
+  final double waveFrequency;
+  final double heightPercentange;
   final int duration;
-
-  /// Height of Wave Widget.
-  final double height;
-
-  /// Wave's alpha of top
-  final double topAlpha;
-
-  /// Wave's alpha of bottom
-  final double bottomAlpha;
-
-  /// Primary color.
-  final Color color;
-
-  /// Color of background.
+  final int layers;
   final Color backgroundColor;
+  final ColorMode colorMode;
+  final List<Color> colors;
+  final List<int> durations;
+  final List<double> heightPercentages;
 
-  /// Curve of wave's animation.
-  final Curve curve;
-
-  const Wave({
-    Key key,
-    this.duration: DefaultConfig.duration,
-    this.height: DefaultConfig.height,
-    this.topAlpha: DefaultConfig.topAlpha,
-    this.bottomAlpha: DefaultConfig.bottomAlpha,
-    this.color: DefaultConfig.color,
-    this.backgroundColor: DefaultConfig.backgroundColor,
-    this.curve: DefaultConfig.curve,
-  }) : super(key: key);
+  WaveWidget({
+    this.layers,
+    this.colorMode = ColorMode.single,
+    this.colors,
+    this.duration = 6000,
+    this.durations,
+    @required this.size,
+    this.waveAmplitude = 20.0,
+    this.waveFrequency = 1.6,
+    this.wavePhase = 10.0,
+    this.backgroundColor,
+    this.heightPercentange = 0.2,
+    this.heightPercentages,
+  })  : assert(() {
+          if (colorMode == ColorMode.single && colors != null) {
+            throw FlutterError(
+                'When using `ColorMode.single`, `colors` should not be set.');
+          }
+          return true;
+        }()),
+        assert(() {
+          if (colorMode == ColorMode.custom && colors == null) {
+            throw FlutterError(
+                'When using `ColorMode.custom`, `colors` must be set.');
+          }
+          return true;
+        }());
 
   @override
-  State<StatefulWidget> createState() => WaveState();
+  State<StatefulWidget> createState() => _WaveWidgetState();
 }
 
-class WaveState extends State<Wave> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation _animation;
-  CurvedAnimation _curve;
+class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
+  List<AnimationController> _waveControls;
+  List<Animation<double>> _wavePhaseValues;
+
+  List<double> _waveAmplitudes = [];
+  Map<Animation<double>, AnimationController> valueList;
+
+  _initAnimation() {
+    if (widget.colorMode == ColorMode.custom) {
+      _waveControls = widget.durations.map((duration) {
+        _waveAmplitudes.add(widget.waveAmplitude + 10);
+        return AnimationController(
+            vsync: this, duration: Duration(milliseconds: duration));
+      }).toList();
+
+      _wavePhaseValues = _waveControls.map((control) {
+        CurvedAnimation _curve =
+            CurvedAnimation(parent: control, curve: Curves.easeInOut);
+        Animation<double> value = Tween(
+          begin: widget.wavePhase,
+          end: 360 + widget.wavePhase,
+        ).animate(
+          _curve,
+        );
+        value.addStatusListener((status) {
+          switch (status) {
+            case AnimationStatus.completed:
+              control.reverse();
+              break;
+            case AnimationStatus.dismissed:
+              control.forward();
+              break;
+            default:
+              break;
+          }
+        });
+        control.forward();
+        return value;
+      }).toList();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-        duration: Duration(milliseconds: widget.duration),
-        vsync: this,
-        animationBehavior: AnimationBehavior.preserve);
-    _curve = CurvedAnimation(parent: _controller, curve: widget.curve);
-    _animation = Tween(begin: 0.00001, end: 0.99999).animate(_curve);
-    _animation.addListener(() {
-      switch (_controller.status) {
-        case AnimationStatus.completed:
-          _controller.reverse();
-          break;
-        case AnimationStatus.dismissed:
-          _controller.forward();
-          break;
-        default:
-          break;
-      }
-    });
-    _controller.forward();
+    _initAnimation();
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  _buildPaints() {
+    List<Widget> paints = [];
+    for (int i = 0; i < _wavePhaseValues.length; i++) {
+      paints.add(
+        Container(
+          child: CustomPaint(
+            painter: _WavePainter(
+                layers: widget.layers,
+                colorMode: widget.colorMode,
+                color: widget.colors[i],
+                heightPercentange: widget.heightPercentages[i],
+                repaint: _waveControls[i],
+                waveFrequency: widget.waveFrequency,
+                wavePhaseValue: _wavePhaseValues[i],
+                waveAmplitude: _waveAmplitudes[i]),
+            size: widget.size,
+          ),
+        ),
+      );
+    }
+    return paints;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: widget.backgroundColor,
-      child: AnimatedBuilder(
-        animation: _animation,
-        child: Container(color: Color(0xFFFFFFFF)),
-        builder: (BuildContext context, Widget child) {
-          return ClipPath(
-            clipper: WaveClipper(
-              cp1xp: _controller.value,
-              cp1yp: _controller.value,
-              ep1p: Offset(0.6 - 0.2 * _controller.value, _controller.value),
-              leftHeightP: _controller.value,
-            ),
-            child: Container(
-              height: widget.height,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromRGBO(
-                          widget.color.red,
-                          widget.color.green,
-                          widget.color.blue,
-                          widget.topAlpha * _controller.value),
-                      Color.fromRGBO(
-                          widget.color.red,
-                          widget.color.green,
-                          widget.color.blue,
-                          0.6 + 0.4 * (widget.bottomAlpha * _controller.value)),
-                    ]),
-              ),
-            ),
-          );
-        },
+      child: Stack(
+        children: _buildPaints(),
       ),
     );
   }
 }
 
-class WaveClipper extends CustomClipper<Path> {
-  /// `control point 1`'s percentage of half the width
-  final double cp1xp;
+/// Meta data of layer
+class Layer {
+  final Color color;
+  final Path path;
+  final double amplitude;
+  final double phase;
 
-  /// `control point 1`'s percentage of half the height
-  final double cp1yp;
-
-  final Offset ep1p;
-  final double leftHeightP;
-
-  WaveClipper({
-    @required this.cp1xp,
-    this.cp1yp,
-    this.ep1p,
-    this.leftHeightP,
+  Layer({
+    this.color,
+    this.path,
+    this.amplitude,
+    this.phase,
   });
+}
 
-  @override
-  Path getClip(Size size) {
-    var path = new Path();
+class _WavePainter extends CustomPainter {
+  final int layers;
+  final ColorMode colorMode;
+  final Color color;
 
-    path.lineTo(0.0, size.height);
-    path.lineTo(size.width, size.height);
+  double waveAmplitude;
 
-    double rightPoint =
-        size.height - size.height / 3 - size.height * leftHeightP / 3;
-    path.lineTo(size.width, rightPoint);
+  Animation<double> wavePhaseValue;
 
-    double endPointX = size.width * ep1p.dx;
-    double endPointY = size.height / 2 + size.height * (0.5 - ep1p.dy) / 2;
+  double waveFrequency;
 
-    double cp1x = endPointX + (size.width / 6) + (cp1xp * size.width * 1 / 6);
-    double cp1y = endPointY - cp1yp * endPointY;
+  double heightPercentange;
 
-    var cp1 = Offset(cp1x, cp1y);
+  double _tempA = 0.0;
+  double _tempB = 0.0;
+  double viewWidth = 0.0;
+  Paint _paint = Paint();
 
-    path.quadraticBezierTo(cp1.dx, cp1.dy, endPointX, endPointY);
+  _WavePainter(
+      {this.layers,
+      this.colorMode,
+      this.color,
+      this.heightPercentange,
+      this.waveFrequency,
+      this.wavePhaseValue,
+      this.waveAmplitude,
+      Listenable repaint})
+      : super(repaint: repaint);
 
-    double cp3x = (endPointX - cp1x) + endPointX;
-    double cp3y = (endPointY - cp1y) + endPointY;
+  _setPaths(int layers, double viewCenterY, Size size, Canvas canvas) {
+    /// Generate layers' meta data with random value
+    List<Layer> _layers = [];
 
-    var cp3 = Offset(cp3x, cp3y);
-    var ep3 = Offset(0, size.height - rightPoint);
-    path.quadraticBezierTo(cp3.dx, cp3.dy, ep3.dx, ep3.dy);
+    if (colorMode == ColorMode.custom) {
+      _layers.add(Layer(
+        path: Path(),
+        color: color,
+        amplitude: (-1.6 + 0.8) * waveAmplitude,
+        phase: wavePhaseValue.value * 2 + 30,
+      ));
+    } else {
+      _layers = List.generate(layers, (i) {
+        return Layer(
+          path: Path(),
+          color: Color(0x3110BB99),
+          amplitude: (1 + (Random().nextInt(10) / 10.0)) * waveAmplitude,
+        );
+      });
+    }
 
-    path.close();
+    /// Move the path in layers
+    _layers.forEach((layer) {
+      layer.path.reset();
+      layer.path.moveTo(
+          0.0,
+          viewCenterY +
+              layer.amplitude * _getSinY(layer.phase, waveFrequency, -1));
+      for (int i = 1; i < size.width + 1; i++) {
+        layer.path.lineTo(
+            i.toDouble(),
+            viewCenterY +
+                layer.amplitude * _getSinY(layer.phase, waveFrequency, i));
+      }
 
-    return path;
+      layer.path.lineTo(size.width, size.height);
+      layer.path.lineTo(0.0, size.height);
+      layer.path.close();
+      _paint.color = layer.color;
+      canvas.drawPath(layer.path, _paint);
+    });
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+  void paint(Canvas canvas, Size size) {
+    double viewCenterY = size.height * (heightPercentange + 0.1);
+    viewWidth = size.width;
+    _setPaths(layers, viewCenterY, size, canvas);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+
+  double _getSinY(
+      double startradius, double waveFrequency, int currentposition) {
+    if (_tempA == 0) {
+      _tempA = pi / viewWidth;
+    }
+    if (_tempB == 0) {
+      _tempB = 2 * pi / 360.0;
+    }
+
+    return (sin(
+        _tempA * waveFrequency * (currentposition + 1) + startradius * _tempB));
+  }
 }
