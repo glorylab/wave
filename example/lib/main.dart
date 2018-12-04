@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
 void main() => runApp(WaveDemoApp());
@@ -26,6 +27,45 @@ class WaveDemoHomePage extends StatefulWidget {
 }
 
 class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
+  _buildCard({Config config, Color backgroundColor = Colors.transparent}) {
+    return Container(
+      height: 152,
+      width: double.infinity,
+      child: Card(
+        elevation: 12.0,
+        margin: EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        child: WaveWidget(
+          config: config,
+          backgroundColor: backgroundColor,
+          size: Size(double.infinity, double.infinity),
+          waveAmplitude: 0,
+        ),
+      ),
+    );
+  }
+
+  MaskFilter _blur;
+  final List<MaskFilter> _blurs = [
+    null,
+    MaskFilter.blur(BlurStyle.normal, 10),
+    MaskFilter.blur(BlurStyle.inner, 10),
+    MaskFilter.blur(BlurStyle.outer, 10),
+    MaskFilter.blur(BlurStyle.solid, 16),
+  ];
+  int _blurIndex = 0;
+  MaskFilter _nextBlur() {
+    if (_blurIndex == _blurs.length - 1) {
+      _blurIndex = 0;
+    } else {
+      _blurIndex = _blurIndex + 1;
+    }
+    _blur = _blurs[_blurIndex];
+    return _blurs[_blurIndex];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,102 +75,58 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
         backgroundColor: Colors.blueGrey[800],
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {},
+            icon: Icon(_blur == null ? Icons.blur_off : Icons.blur_on),
+            onPressed: () {
+              setState(() {
+                _blur = _nextBlur();
+              });
+            },
           )
         ],
       ),
       body: Center(
         child: ListView(
           children: <Widget>[
-            Container(
-              height: 192,
-              width: double.infinity,
-              child: Card(
-                elevation: 1.0,
-                margin: EdgeInsets.all(16.0),
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                child: WaveWidget(
-                  colorMode: ColorMode.custom,
-                  colors: [
-                    Colors.blue,
-                    Colors.orange,
-                    Colors.green,
-                    Colors.lightBlueAccent,
-                  ],
-                  durations: [
-                    32000,
-                    21000,
-                    18000,
-                    5000,
-                  ],
-                  heightPercentages: [0.25, 0.32, 0.45, 0.52],
-                  backgroundColor: Colors.transparent,
-                  size: Size(double.infinity, double.infinity),
-                ),
+            SizedBox(height: 16.0),
+            _buildCard(
+              config: CustomConfig(
+                gradients: [
+                  [Colors.red, Color(0xEEF44336)],
+                  [Colors.red[800], Color(0x77E57373)],
+                  [Colors.orange, Color(0x66FF9800)],
+                  [Colors.yellow, Color(0x55FFEB3B)]
+                ],
+                durations: [35000, 19440, 10800, 6000],
+                heightPercentages: [0.20, 0.23, 0.25, 0.30],
+                blur: _blur,
               ),
             ),
-            Container(
-              height: 192,
-              width: double.infinity,
-              child: Card(
-                elevation: 1.0,
-                margin: EdgeInsets.all(16.0),
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                child: WaveWidget(
-                  colorMode: ColorMode.custom,
+            _buildCard(
+              config: CustomConfig(
+                colors: [
+                  Colors.pink[400],
+                  Colors.pink[300],
+                  Colors.pink[200],
+                  Colors.pink[100]
+                ],
+                durations: [35000, 19440, 10800, 6000],
+                heightPercentages: [0.20, 0.23, 0.25, 0.30],
+                blur: _blur,
+              ),
+            ),
+            _buildCard(
+                config: CustomConfig(
                   colors: [
                     Colors.white70,
                     Colors.white54,
                     Colors.white30,
                     Colors.white24,
                   ],
-                  durations: [
-                    32000,
-                    21000,
-                    18000,
-                    5000,
-                  ],
-                  waveAmplitude: 0,
+                  durations: [32000, 21000, 18000, 5000],
                   heightPercentages: [0.25, 0.26, 0.28, 0.31],
-                  backgroundColor: Colors.blue,
-                  size: Size(double.infinity, double.infinity),
+                  blur: _blur,
                 ),
-              ),
-            ),
-            Container(
-              height: 256,
-              width: double.infinity,
-              child: Card(
-                elevation: 1.0,
-                margin: EdgeInsets.all(16.0),
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                child: WaveWidget(
-                  colorMode: ColorMode.custom,
-                  colors: [
-                    Color(0x4410BB99),
-                    Color(0x335588BB),
-                    Color(0x2288BBEE),
-                    Color(0x2288BBEE),
-                  ],
-                  durations: [
-                    7000,
-                    5000,
-                    18000,
-                    35000,
-                  ],
-                  heightPercentages: [0.1, 0.13, 0.15, 0.09],
-                  backgroundColor: Colors.transparent,
-                  size: Size(double.infinity, double.infinity),
-                ),
-              ),
-            ),
+                backgroundColor: Colors.blue[600]),
           ],
         ),
       ),
