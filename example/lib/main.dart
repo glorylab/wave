@@ -29,7 +29,7 @@ class WaveDemoHomePage extends StatefulWidget {
 class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
   _buildCard({Config config, Color backgroundColor = Colors.transparent}) {
     return Container(
-      height: 152,
+      height: 152.0,
       width: double.infinity,
       child: Card(
         elevation: 12.0,
@@ -50,10 +50,10 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
   MaskFilter _blur;
   final List<MaskFilter> _blurs = [
     null,
-    MaskFilter.blur(BlurStyle.normal, 10),
-    MaskFilter.blur(BlurStyle.inner, 10),
-    MaskFilter.blur(BlurStyle.outer, 10),
-    MaskFilter.blur(BlurStyle.solid, 16),
+    MaskFilter.blur(BlurStyle.normal, 10.0),
+    MaskFilter.blur(BlurStyle.inner, 10.0),
+    MaskFilter.blur(BlurStyle.outer, 10.0),
+    MaskFilter.blur(BlurStyle.solid, 16.0),
   ];
   int _blurIndex = 0;
   MaskFilter _nextBlur() {
