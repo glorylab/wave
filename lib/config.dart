@@ -48,8 +48,10 @@ class CustomConfig extends Config {
           return true;
         }()),
         assert(() {
-          if (gradients == null && (gradientBegin != null || gradientEnd != null)) {
-            throwNullError('gradientPositions', 'gradients');
+          if (gradients == null &&
+              (gradientBegin != null || gradientEnd != null)) {
+            throw FlutterError(
+                'You set a gradient direction but forgot setting `gradients`.');
           }
           return true;
         }()),

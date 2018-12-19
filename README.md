@@ -18,6 +18,8 @@ WaveWidget(
         durations: [35000, 19440, 10800, 6000],
         heightPercentages: [0.20, 0.23, 0.25, 0.30],
         blur: MaskFilter.blur(BlurStyle.solid, 10),
+        gradientBegin: Alignment.bottomLeft,
+        gradientEnd: Alignment.topRight,
     ),
     colors: [
         Colors.white70,

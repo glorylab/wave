@@ -99,6 +99,8 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                 durations: [35000, 19440, 10800, 6000],
                 heightPercentages: [0.20, 0.23, 0.25, 0.30],
                 blur: _blur,
+                gradientBegin: Alignment.bottomLeft,
+                gradientEnd: Alignment.topRight,
               ),
             ),
             _buildCard(
