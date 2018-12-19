@@ -278,6 +278,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     if (widget.config.colorMode == ColorMode.custom) {
       List<Color> _colors = (widget.config as CustomConfig).colors;
       List<List<Color>> _gradients = (widget.config as CustomConfig).gradients;
+      Alignment begin = (widget.config as CustomConfig).gradientBegin;
+      Alignment end = (widget.config as CustomConfig).gradientEnd;
       for (int i = 0; i < _wavePhaseValues.length; i++) {
         paints.add(
           Container(
@@ -285,6 +287,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
               painter: _CustomWavePainter(
                 color: _colors == null ? null : _colors[i],
                 gradient: _gradients == null ? null : _gradients[i],
+                gradientBegin: begin,
+                gradientEnd: end,
                 heightPercentange:
                     (widget.config as CustomConfig).heightPercentages[i],
                 repaint: _waveControllers[i],
@@ -350,10 +354,13 @@ class Layer {
   });
 }
 
+
 class _CustomWavePainter extends CustomPainter {
   final ColorMode colorMode;
   final Color color;
   final List<Color> gradient;
+  final Alignment gradientBegin;
+  final Alignment gradientEnd;
   final MaskFilter blur;
 
   double waveAmplitude;
@@ -373,6 +380,8 @@ class _CustomWavePainter extends CustomPainter {
       {this.colorMode,
       this.color,
       this.gradient,
+      this.gradientBegin,
+      this.gradientEnd,
       this.blur,
       this.heightPercentange,
       this.waveFrequency,
@@ -413,8 +422,8 @@ class _CustomWavePainter extends CustomPainter {
       var rect = Offset.zero &
           Size(size.width, size.height - viewCenterY * heightPercentange);
       _paint.shader = LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
+              begin: gradientBegin == null ? Alignment.bottomCenter : gradientBegin,
+              end: gradientEnd == null ? Alignment.topCenter : gradientEnd,
               colors: _layer.gradient)
           .createShader(rect);
     }

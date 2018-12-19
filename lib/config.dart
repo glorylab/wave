@@ -27,6 +27,8 @@ abstract class Config {
 class CustomConfig extends Config {
   final List<Color> colors;
   final List<List<Color>> gradients;
+  final Alignment gradientBegin;
+  final Alignment gradientEnd;
   final List<int> durations;
   final List<double> heightPercentages;
   final MaskFilter blur;
@@ -34,12 +36,20 @@ class CustomConfig extends Config {
   CustomConfig({
     this.colors,
     this.gradients,
+    this.gradientBegin,
+    this.gradientEnd,
     @required this.durations,
     @required this.heightPercentages,
     this.blur,
   })  : assert(() {
           if (colors == null && gradients == null) {
             throwNullError('custom', 'colors` or `gradients');
+          }
+          return true;
+        }()),
+        assert(() {
+          if (gradients == null && (gradientBegin != null || gradientEnd != null)) {
+            throwNullError('gradientPositions', 'gradients');
           }
           return true;
         }()),
