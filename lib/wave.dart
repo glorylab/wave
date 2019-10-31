@@ -239,6 +239,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
   List<double> _waveAmplitudes = [];
   Map<Animation<double>, AnimationController> valueList;
+  Timer _endAnimationTimer;
 
   _initAnimations() {
     if (widget.config.colorMode == ColorMode.custom) {
@@ -276,7 +277,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
       // If isLoop is false, stop the animation after the specified duration.
       if (!widget.isLoop) {
-        Timer(Duration(milliseconds: widget.duration), () {
+        _endAnimationTimer = Timer(Duration(milliseconds: widget.duration), () {
           for (AnimationController waveController in _waveControllers) {
             waveController.stop();
           }
@@ -333,6 +334,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   @override
   void dispose() {
     _disposeAnimations();
+    _endAnimationTimer?.cancel();
     super.dispose();
   }
 
