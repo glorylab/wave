@@ -200,6 +200,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
@@ -214,6 +215,7 @@ class WaveWidget extends StatefulWidget {
   final double heightPercentange;
   final int duration;
   final Color backgroundColor;
+  final bool isLoop;
 
   WaveWidget({
     @required this.config,
@@ -224,6 +226,7 @@ class WaveWidget extends StatefulWidget {
     this.wavePhase = 10.0,
     this.backgroundColor,
     this.heightPercentange = 0.2,
+    this.isLoop = true,
   });
 
   @override
@@ -236,6 +239,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
   List<double> _waveAmplitudes = [];
   Map<Animation<double>, AnimationController> valueList;
+  Timer _endAnimationTimer;
 
   _initAnimations() {
     if (widget.config.colorMode == ColorMode.custom) {
@@ -270,6 +274,15 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         controller.forward();
         return value;
       }).toList();
+
+      // If isLoop is false, stop the animation after the specified duration.
+      if (!widget.isLoop) {
+        _endAnimationTimer = Timer(Duration(milliseconds: widget.duration), () {
+          for (AnimationController waveController in _waveControllers) {
+            waveController.stop();
+          }
+        });
+      }
     }
   }
 
@@ -321,6 +334,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   @override
   void dispose() {
     _disposeAnimations();
+    _endAnimationTimer?.cancel();
     super.dispose();
   }
 
