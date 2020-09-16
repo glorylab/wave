@@ -35,7 +35,14 @@ WaveWidget(
     ],
     waveAmplitude: 0,
     heightPercentages: [0.25, 0.26, 0.28, 0.31],
-    backgroundColor: Colors.blue,
+    backgroundImage: DecorationImage(
+        image: NetworkImage(
+            'https://images.unsplash.com/photo-1600107363560-a2a891080c31?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=672&q=80',
+        ),
+        fit: BoxFit.cover,
+        colorFilter:
+            ColorFilter.mode(Colors.white, BlendMode.softLight),
+    ),
     size: Size(
         double.infinity,
         double.infinity,
@@ -68,8 +75,3 @@ WaveWidget(
 ### GIF
 
 ![demo](example/assets/demo.gif)
-
-## TODO
-
-- [ ] Static mode.
-- [ ] Random mode.
