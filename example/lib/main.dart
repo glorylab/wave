@@ -27,9 +27,14 @@ class WaveDemoHomePage extends StatefulWidget {
 }
 
 class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
-  _buildCard({Config config, Color backgroundColor = Colors.transparent}) {
+  _buildCard({
+    Config config,
+    Color backgroundColor = Colors.transparent,
+    DecorationImage backgroundImage,
+    double height = 152.0,
+  }) {
     return Container(
-      height: 152.0,
+      height: height,
       width: double.infinity,
       child: Card(
         elevation: 12.0,
@@ -40,6 +45,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
         child: WaveWidget(
           config: config,
           backgroundColor: backgroundColor,
+          backgroundImage: backgroundImage,
           size: Size(double.infinity, double.infinity),
           waveAmplitude: 0,
         ),
@@ -89,6 +95,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
           children: <Widget>[
             SizedBox(height: 16.0),
             _buildCard(
+              backgroundColor: Colors.purpleAccent,
               config: CustomConfig(
                 gradients: [
                   [Colors.red, Color(0xEEF44336)],
@@ -104,6 +111,15 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
               ),
             ),
             _buildCard(
+              height: 256.0,
+              backgroundImage: DecorationImage(
+                image: NetworkImage(
+                  'https://images.unsplash.com/photo-1600107363560-a2a891080c31?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=672&q=80',
+                ),
+                fit: BoxFit.cover,
+                colorFilter:
+                    ColorFilter.mode(Colors.white, BlendMode.softLight),
+              ),
               config: CustomConfig(
                 colors: [
                   Colors.pink[400],
@@ -111,8 +127,8 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                   Colors.pink[200],
                   Colors.pink[100]
                 ],
-                durations: [35000, 19440, 10800, 6000],
-                heightPercentages: [0.20, 0.23, 0.25, 0.30],
+                durations: [18000, 8000, 5000, 12000],
+                heightPercentages: [0.85, 0.86, 0.88, 0.90],
                 blur: _blur,
               ),
             ),

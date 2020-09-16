@@ -202,6 +202,7 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:wave/config.dart';
@@ -215,17 +216,19 @@ class WaveWidget extends StatefulWidget {
   final double heightPercentange;
   final int duration;
   final Color backgroundColor;
+  final DecorationImage backgroundImage;
   final bool isLoop;
 
   WaveWidget({
     @required this.config,
-    this.duration = 6000,
     @required this.size,
     this.waveAmplitude = 20.0,
-    this.waveFrequency = 1.6,
     this.wavePhase = 10.0,
-    this.backgroundColor,
+    this.waveFrequency = 1.6,
     this.heightPercentange = 0.2,
+    this.duration = 6000,
+    this.backgroundColor,
+    this.backgroundImage,
     this.isLoop = true,
   });
 
@@ -341,7 +344,10 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.backgroundColor,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        image: widget.backgroundImage,
+      ),
       child: Stack(
         children: _buildPaints(),
       ),
@@ -367,7 +373,6 @@ class Layer {
     this.phase,
   });
 }
-
 
 class _CustomWavePainter extends CustomPainter {
   final ColorMode colorMode;
@@ -436,7 +441,9 @@ class _CustomWavePainter extends CustomPainter {
       var rect = Offset.zero &
           Size(size.width, size.height - viewCenterY * heightPercentange);
       _paint.shader = LinearGradient(
-              begin: gradientBegin == null ? Alignment.bottomCenter : gradientBegin,
+              begin: gradientBegin == null
+                  ? Alignment.bottomCenter
+                  : gradientBegin,
               end: gradientEnd == null ? Alignment.topCenter : gradientEnd,
               colors: _layer.gradient)
           .createShader(rect);
