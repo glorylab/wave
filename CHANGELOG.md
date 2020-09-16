@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.0
+
+Add backgroundImage param.
+
 ## 0.0.7
 
 Add options of setting blur and gradient.
