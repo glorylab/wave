@@ -18,7 +18,7 @@ abstract class Config {
 
   Config({this.colorMode});
 
-  void throwNullError(String colorModeStr, String configStr) {
+  static void throwNullError(String colorModeStr, String configStr) {
     throw FlutterError(
         'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
   }
@@ -43,7 +43,7 @@ class CustomConfig extends Config {
     this.blur,
   })  : assert(() {
           if (colors == null && gradients == null) {
-            throwNullError('custom', 'colors` or `gradients');
+            Config.throwNullError('custom', 'colors` or `gradients');
           }
           return true;
         }()),
@@ -57,13 +57,13 @@ class CustomConfig extends Config {
         }()),
         assert(() {
           if (durations == null) {
-            throwNullError('custom', 'durations');
+            Config.throwNullError('custom', 'durations');
           }
           return true;
         }()),
         assert(() {
           if (heightPercentages == null) {
-            throwNullError('custom', 'heightPercentages');
+            Config.throwNullError('custom', 'heightPercentages');
           }
           return true;
         }()),
