@@ -82,6 +82,11 @@ class CustomConfig extends Config {
         super(colorMode: ColorMode.custom);
 }
 
+void throwNullError(String colorModeStr, String configStr) {
+  throw FlutterError(
+      'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
+}
+
 /// todo
 class RandomConfig extends Config {
   RandomConfig() : super(colorMode: ColorMode.random);
