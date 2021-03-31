@@ -28,7 +28,7 @@ void main() {
   });
 }
 
-Widget getWaveWidget({int duration, bool isLoop = true}) {
+Widget getWaveWidget({int? duration, bool isLoop = true}) {
   return MaterialApp(
     home: Container(
       child: WaveWidget(

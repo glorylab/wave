@@ -14,7 +14,7 @@ enum ColorMode {
 }
 
 abstract class Config {
-  final ColorMode colorMode;
+  final ColorMode? colorMode;
 
   Config({this.colorMode});
 
@@ -25,21 +25,21 @@ abstract class Config {
 }
 
 class CustomConfig extends Config {
-  final List<Color> colors;
-  final List<List<Color>> gradients;
-  final Alignment gradientBegin;
-  final Alignment gradientEnd;
-  final List<int> durations;
-  final List<double> heightPercentages;
-  final MaskFilter blur;
+  final List<Color>? colors;
+  final List<List<Color>>? gradients;
+  final Alignment? gradientBegin;
+  final Alignment? gradientEnd;
+  final List<int>? durations;
+  final List<double>? heightPercentages;
+  final MaskFilter? blur;
 
   CustomConfig({
     this.colors,
     this.gradients,
     this.gradientBegin,
     this.gradientEnd,
-    @required this.durations,
-    @required this.heightPercentages,
+    required this.durations,
+    required this.heightPercentages,
     this.blur,
   })  : assert(() {
           if (colors == null && gradients == null) {
@@ -68,7 +68,9 @@ class CustomConfig extends Config {
           return true;
         }()),
         assert(() {
-          if (colors != null) {
+          if (colors != null &&
+              durations != null &&
+              heightPercentages != null) {
             if (colors.length != durations.length ||
                 colors.length != heightPercentages.length) {
               throw FlutterError(
