@@ -348,7 +348,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     if (oldWidget.waveAmplitude != widget.waveAmplitude) {
       setState(() {
         for (int i = 0;
-            i < (widget.config as CustomConfig).durations.length;
+            i < (widget.config as CustomConfig).durations?.length;
             i++) {
           _waveAmplitudes[i] = widget.waveAmplitude + 10;
         }
