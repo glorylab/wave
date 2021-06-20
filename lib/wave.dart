@@ -341,6 +341,20 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     _endAnimationTimer?.cancel();
     super.dispose();
   }
+  
+  @override
+  void didUpdateWidget(covariant WaveWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.waveAmplitude != widget.waveAmplitude) {
+      setState(() {
+        for (int i = 0;
+            i < (widget.config as CustomConfig).durations.length;
+            i++) {
+          _waveAmplitudes[i] = widget.waveAmplitude + 10;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
