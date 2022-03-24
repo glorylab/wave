@@ -213,7 +213,7 @@ class WaveWidget extends StatefulWidget {
   final double waveAmplitude;
   final double wavePhase;
   final double waveFrequency;
-  final double heightPercentange;
+  final double heightPercentage;
   final int? duration;
   final Color? backgroundColor;
   final DecorationImage? backgroundImage;
@@ -225,7 +225,7 @@ class WaveWidget extends StatefulWidget {
     this.waveAmplitude = 20.0,
     this.wavePhase = 10.0,
     this.waveFrequency = 1.6,
-    this.heightPercentange = 0.2,
+    this.heightPercentage = 0.2,
     this.duration = 6000,
     this.backgroundColor,
     this.backgroundImage,
@@ -306,7 +306,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
                 gradient: _gradients == null ? null : _gradients[i],
                 gradientBegin: begin,
                 gradientEnd: end,
-                heightPercentange:
+                heightPercentage:
                     (widget.config as CustomConfig).heightPercentages![i],
                 repaint: _waveControllers[i],
                 waveFrequency: widget.waveFrequency,
@@ -389,7 +389,7 @@ class _CustomWavePainter extends CustomPainter {
 
   double? waveFrequency;
 
-  double? heightPercentange;
+  double? heightPercentage;
 
   double _tempA = 0.0;
   double _tempB = 0.0;
@@ -403,7 +403,7 @@ class _CustomWavePainter extends CustomPainter {
       this.gradientBegin,
       this.gradientEnd,
       this.blur,
-      this.heightPercentange,
+      this.heightPercentage,
       this.waveFrequency,
       this.wavePhaseValue,
       this.waveAmplitude,
@@ -440,7 +440,7 @@ class _CustomWavePainter extends CustomPainter {
     }
     if (_layer.gradient != null) {
       var rect = Offset.zero &
-          Size(size.width, size.height - viewCenterY * heightPercentange!);
+          Size(size.width, size.height - viewCenterY * heightPercentage!);
       _paint.shader = LinearGradient(
               begin: gradientBegin == null
                   ? Alignment.bottomCenter
@@ -459,7 +459,7 @@ class _CustomWavePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double viewCenterY = size.height * (heightPercentange! + 0.1);
+    double viewCenterY = size.height * (heightPercentage! + 0.1);
     viewWidth = size.width;
     _setPaths(viewCenterY, size, canvas);
   }
