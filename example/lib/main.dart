@@ -18,9 +18,9 @@ class WaveDemoApp extends StatelessWidget {
 }
 
 class WaveDemoHomePage extends StatefulWidget {
-  WaveDemoHomePage({Key key, this.title}) : super(key: key);
+  WaveDemoHomePage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _WaveDemoHomePageState createState() => _WaveDemoHomePageState();
@@ -28,9 +28,9 @@ class WaveDemoHomePage extends StatefulWidget {
 
 class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
   _buildCard({
-    Config config,
-    Color backgroundColor = Colors.transparent,
-    DecorationImage backgroundImage,
+    required Config config,
+    Color? backgroundColor = Colors.transparent,
+    DecorationImage? backgroundImage,
     double height = 152.0,
   }) {
     return Container(
@@ -53,8 +53,8 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
     );
   }
 
-  MaskFilter _blur;
-  final List<MaskFilter> _blurs = [
+  MaskFilter? _blur;
+  final List<MaskFilter?> _blurs = [
     null,
     MaskFilter.blur(BlurStyle.normal, 10.0),
     MaskFilter.blur(BlurStyle.inner, 10.0),
@@ -62,7 +62,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
     MaskFilter.blur(BlurStyle.solid, 16.0),
   ];
   int _blurIndex = 0;
-  MaskFilter _nextBlur() {
+  MaskFilter? _nextBlur() {
     if (_blurIndex == _blurs.length - 1) {
       _blurIndex = 0;
     } else {
@@ -76,7 +76,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
         elevation: 10.0,
         backgroundColor: Colors.blueGrey[800],
         actions: <Widget>[
@@ -99,7 +99,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
               config: CustomConfig(
                 gradients: [
                   [Colors.red, Color(0xEEF44336)],
-                  [Colors.red[800], Color(0x77E57373)],
+                  [Colors.red[800]!, Color(0x77E57373)],
                   [Colors.orange, Color(0x66FF9800)],
                   [Colors.yellow, Color(0x55FFEB3B)]
                 ],
@@ -122,10 +122,10 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
               ),
               config: CustomConfig(
                 colors: [
-                  Colors.pink[400],
-                  Colors.pink[300],
-                  Colors.pink[200],
-                  Colors.pink[100]
+                  Colors.pink[400]!,
+                  Colors.pink[300]!,
+                  Colors.pink[200]!,
+                  Colors.pink[100]!
                 ],
                 durations: [18000, 8000, 5000, 12000],
                 heightPercentages: [0.85, 0.86, 0.88, 0.90],
