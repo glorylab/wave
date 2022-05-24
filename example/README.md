@@ -40,26 +40,4 @@
 
 ## Preview
 
-### Normal
-
-![demo](assets/demo-blur_off.jpeg)
-
-### Solid Blur
-
-![demo](assets/demo-blur_solid.png)
-
-### Inner Blur
-
-![demo](assets/demo-blur_inner.png)
-
-### Outer Blur
-
-![demo](assets/demo-blur_outer.png)
-
-### Normal Blur
-
-![demo](assets/demo-blur_normal.png)
-
-### GIF
-
-![demo](assets/demo.gif)
+Update later.

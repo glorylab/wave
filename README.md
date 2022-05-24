@@ -52,26 +52,4 @@ WaveWidget(
 
 ## Preview
 
-### Normal
-
-![demo](example/assets/demo-blur_off.jpeg)
-
-### Solid Blur
-
-![demo](example/assets/demo-blur_solid.png)
-
-### Inner Blur
-
-![demo](example/assets/demo-blur_inner.png)
-
-### Outer Blur
-
-![demo](example/assets/demo-blur_outer.png)
-
-### Normal Blur
-
-![demo](example/assets/demo-blur_normal.png)
-
-### GIF
-
-![demo](example/assets/demo.gif)
+Update later.
