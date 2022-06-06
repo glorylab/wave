@@ -1,6 +1,6 @@
-# Wave
+# WAVE
 
-![Wave logo](/assets/wave-128.png "Wave logo")
+<img src='./assets/wave-128.png' width="128" height="128" alt="Flutter package: WAVE" />
 
 ---
 
