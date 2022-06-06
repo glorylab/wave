@@ -1,57 +1,53 @@
 # Wave
 
-[![Awesome: Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes) [![pub package](https://img.shields.io/pub/v/wave.svg?style=flat-square)](https://pub.dartlang.org/packages/wave) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?longCache=true&style=flat-square)
+![Wave logo](/assets/wave-128.png "Wave logo")
 
-> Widget for displaying waves with custom color, duration, floating and blur effects.
+---
+
+[![Awesome: Flutter](https://img.shields.io/badge/⌐◨─◨-AwesomeFlutter-blue.svg?logo=flutter&longCache=true&style=flat-square)](https://github.com/Solido/awesome-flutter#effect) 
+[![Pub](https://img.shields.io/pub/v/wave.svg?logo=flutter&style=flat-square)](https://pub.dev/packages/wave)
+![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?longCache=true&style=flat-square)
+
+A Flutter package for displaying waves.
+
+## Demo
+
+| Platform  | Branch    | URL   | 
+| -:        | -:        | -:    |
+| Web       | `master`  | [wave.glorylab.xyz](https://wave.glorylab.xyz "The demo page of the wave package.") |
+| Web       | `develop` | [dev.wave.glorylab.xyz](https://dev.wave.glorylab.xyz "The demo page of the wave package's develop branch.") |
+
+
 
 ## Getting Started
 
 ``` Dart
+
+static const _backgroundColor = Color(0xFFF15BB5);
+
+static const _colors = [
+    Color(0xFFFEE440),
+    Color(0xFF00BBF9),
+];
+
+static const _durations = [
+    5000,
+    4000,
+];
+
+static const _heightPercentages = [
+    0.65,
+    0.66,
+];
+
 WaveWidget(
     config: CustomConfig(
-        gradients: [
-            [Colors.red, Color(0xEEF44336)],
-            [Colors.red[800], Color(0x77E57373)],
-            [Colors.orange, Color(0x66FF9800)],
-            [Colors.yellow, Color(0x55FFEB3B)]
-        ],
-        durations: [35000, 19440, 10800, 6000],
-        heightPercentages: [0.20, 0.23, 0.25, 0.30],
-        blur: MaskFilter.blur(BlurStyle.solid, 10),
-        gradientBegin: Alignment.bottomLeft,
-        gradientEnd: Alignment.topRight,
+        colors: colors,
+        durations: _durations,
+        heightPercentages: _heightPercentages,
     ),
-    colors: [
-        Colors.white70,
-        Colors.white54,
-        Colors.white30,
-        Colors.white24,
-    ],
-    durations: [
-        32000,
-        21000,
-        18000,
-        5000,
-    ],
+    backgroundColor: _backgroundColor,
+    size: Size(double.infinity, double.infinity),
     waveAmplitude: 0,
-    heightPercentages: [0.25, 0.26, 0.28, 0.31],
-    backgroundImage: DecorationImage(
-        image: NetworkImage(
-            'https://images.unsplash.com/photo-1600107363560-a2a891080c31?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=672&q=80',
-        ),
-        fit: BoxFit.cover,
-        colorFilter:
-            ColorFilter.mode(Colors.white, BlendMode.softLight),
-    ),
-    size: Size(
-        double.infinity,
-        double.infinity,
-    ),
 ),
 ```
-
-## Preview
-
-[master](https://wave.glorylab.xyz "The demo page of the wave package.")
-
-[develop](https://dev.wave.glorylab.xyz "The demo page of the wave package's develop branch.")
