@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.1
+
+Modify README and web version example, etc.
+
 ## 0.2.0
 
 Migrate to null safety.
