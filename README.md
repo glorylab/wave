@@ -1,6 +1,6 @@
 # WAVE
 
-<img src='./assets/wave-128.png' width="128" height="128" alt="Flutter package: WAVE" />
+<img src='assets/wave_banner.png' width="1000" height="auto" alt="Flutter package: WAVE" />
 
 ---
 
