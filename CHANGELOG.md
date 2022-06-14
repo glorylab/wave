@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.2
+
+Update banner.
+
 ## 0.2.1
 
 Modify README and web version example, etc.

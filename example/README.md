@@ -1,6 +1,6 @@
 # Wave
 
-<img src='../assets/wave_banner.png' width="1000" height="auto" alt="Flutter package: WAVE" />
+<img src='https://github.com/glorylab/wave/blob/master/assets/wave_banner.png?raw=true' width="1000" height="auto" alt="Flutter package: tm - WAVE" />
 
 ---
 
