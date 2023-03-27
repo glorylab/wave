@@ -233,10 +233,26 @@ class WaveWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _WaveWidgetState();
+
+  late final List<AnimationController> _waveControllers;
+  bool get animating {
+    return _waveControllers.first.isAnimating;
+  }
+
+  void pause() {
+    _waveControllers.forEach((element) {
+      element.stop(canceled: false);
+    });
+  }
+
+  void start() {
+    _waveControllers.forEach((element) {
+      element.forward();
+    });
+  }
 }
 
 class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
-  late List<AnimationController> _waveControllers;
   late List<Animation<double>> _wavePhaseValues;
 
   List<double> _waveAmplitudes = [];
@@ -245,16 +261,13 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
   _initAnimations() {
     if (widget.config.colorMode == ColorMode.custom) {
-      _waveControllers =
-          (widget.config as CustomConfig).durations!.map((duration) {
+      widget._waveControllers = (widget.config as CustomConfig).durations!.map((duration) {
         _waveAmplitudes.add(widget.waveAmplitude + 10);
-        return AnimationController(
-            vsync: this, duration: Duration(milliseconds: duration));
+        return AnimationController(vsync: this, duration: Duration(milliseconds: duration));
       }).toList();
 
-      _wavePhaseValues = _waveControllers.map((controller) {
-        CurvedAnimation _curve =
-            CurvedAnimation(parent: controller, curve: Curves.easeInOut);
+      _wavePhaseValues = widget._waveControllers.map((controller) {
+        CurvedAnimation _curve = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
         Animation<double> value = Tween(
           begin: widget.wavePhase,
           end: 360 + widget.wavePhase,
@@ -279,9 +292,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
       // If isLoop is false, stop the animation after the specified duration.
       if (!widget.isLoop) {
-        _endAnimationTimer =
-            Timer(Duration(milliseconds: widget.duration!), () {
-          for (AnimationController waveController in _waveControllers) {
+        _endAnimationTimer = Timer(Duration(milliseconds: widget.duration!), () {
+          for (AnimationController waveController in widget._waveControllers) {
             waveController.stop();
           }
         });
@@ -305,9 +317,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
                 gradient: _gradients == null ? null : _gradients[i],
                 gradientBegin: begin,
                 gradientEnd: end,
-                heightPercentage:
-                    (widget.config as CustomConfig).heightPercentages![i],
-                repaint: _waveControllers[i],
+                heightPercentage: (widget.config as CustomConfig).heightPercentages![i],
+                repaint: widget._waveControllers[i],
                 waveFrequency: widget.waveFrequency,
                 wavePhaseValue: _wavePhaseValues[i],
                 waveAmplitude: _waveAmplitudes[i],
@@ -323,7 +334,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   }
 
   _disposeAnimations() {
-    _waveControllers.forEach((controller) {
+    widget._waveControllers.forEach((controller) {
       controller.dispose();
     });
   }
@@ -420,15 +431,9 @@ class _CustomWavePainter extends CustomPainter {
     );
 
     _layer.path!.reset();
-    _layer.path!.moveTo(
-        0.0,
-        viewCenterY +
-            _layer.amplitude! * _getSinY(_layer.phase!, waveFrequency!, -1));
+    _layer.path!.moveTo(0.0, viewCenterY + _layer.amplitude! * _getSinY(_layer.phase!, waveFrequency!, -1));
     for (int i = 1; i < size.width + 1; i++) {
-      _layer.path!.lineTo(
-          i.toDouble(),
-          viewCenterY +
-              _layer.amplitude! * _getSinY(_layer.phase!, waveFrequency!, i));
+      _layer.path!.lineTo(i.toDouble(), viewCenterY + _layer.amplitude! * _getSinY(_layer.phase!, waveFrequency!, i));
     }
 
     _layer.path!.lineTo(size.width, size.height);
@@ -438,12 +443,9 @@ class _CustomWavePainter extends CustomPainter {
       _paint.color = _layer.color!;
     }
     if (_layer.gradient != null) {
-      var rect = Offset.zero &
-          Size(size.width, size.height - viewCenterY * heightPercentage!);
+      var rect = Offset.zero & Size(size.width, size.height - viewCenterY * heightPercentage!);
       _paint.shader = LinearGradient(
-              begin: gradientBegin == null
-                  ? Alignment.bottomCenter
-                  : gradientBegin!,
+              begin: gradientBegin == null ? Alignment.bottomCenter : gradientBegin!,
               end: gradientEnd == null ? Alignment.topCenter : gradientEnd!,
               colors: _layer.gradient!)
           .createShader(rect);
@@ -468,8 +470,7 @@ class _CustomWavePainter extends CustomPainter {
     return false;
   }
 
-  double _getSinY(
-      double startradius, double waveFrequency, int currentposition) {
+  double _getSinY(double startradius, double waveFrequency, int currentposition) {
     if (_tempA == 0) {
       _tempA = pi / viewWidth;
     }
@@ -477,7 +478,6 @@ class _CustomWavePainter extends CustomPainter {
       _tempB = 2 * pi / 360.0;
     }
 
-    return (sin(
-        _tempA * waveFrequency * (currentposition + 1) + startradius * _tempB));
+    return (sin(_tempA * waveFrequency * (currentposition + 1) + startradius * _tempB));
   }
 }
