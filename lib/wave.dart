@@ -217,6 +217,7 @@ class WaveWidget extends StatefulWidget {
   final Color? backgroundColor;
   final DecorationImage? backgroundImage;
   final bool isLoop;
+  final bool useRepaintBoundary;
 
   WaveWidget({
     required this.config,
@@ -229,6 +230,7 @@ class WaveWidget extends StatefulWidget {
     this.backgroundColor,
     this.backgroundImage,
     this.isLoop = true,
+    this.useRepaintBoundary = false,
   });
 
   @override
@@ -343,14 +345,20 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Widget waveStack = Stack(
+      children: _buildPaints(),
+    );
+
+    if (widget.useRepaintBoundary) {
+      waveStack = RepaintBoundary(child: waveStack);
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: widget.backgroundColor,
         image: widget.backgroundImage,
       ),
-      child: Stack(
-        children: _buildPaints(),
-      ),
+      child: waveStack,
     );
   }
 }
