@@ -1,12 +1,15 @@
+# .github/workflows/publish.yml
 name: Publish to pub.dev
 
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+    - 'v[0-9]+.[0-9]+.[0-9]+*' # for tags like: 'v1.2.3'
 
 jobs:
   publish:
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml
-    # with:
-    #   working-directory: path/to/package/within/repository
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      # Specify the github actions deployment environment
+      environment: pub.dev
+      # working-directory: path/to/package/within/repository
