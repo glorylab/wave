@@ -395,6 +395,25 @@ class _CustomWavePainter extends CustomPainter {
   double viewWidth = 0.0;
   Paint _paint = Paint();
 
+  Path _cachedPath = Path();
+  bool _shouldRecomputePath = true;
+
+  void _computePath(double viewCenterY, Size size) {
+    _cachedPath.reset();
+
+    for (int i = 0; i < size.width + 1; i++) {
+      _cachedPath.lineTo(
+          i.toDouble(),
+          viewCenterY +
+              waveAmplitude! *
+                  _getSinY(wavePhaseValue!.value * 2 + 30, waveFrequency!, i));
+    }
+
+    _cachedPath.lineTo(size.width, size.height);
+    _cachedPath.lineTo(0.0, size.height);
+    _cachedPath.close();
+  }
+
   _CustomWavePainter(
       {this.colorMode,
       this.color,
@@ -460,11 +479,22 @@ class _CustomWavePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double viewCenterY = size.height * (heightPercentage! + 0.1);
     viewWidth = size.width;
-    _setPaths(viewCenterY, size, canvas);
+
+    if (_shouldRecomputePath) {
+      _computePath(viewCenterY, size);
+      _shouldRecomputePath = false;
+    }
+
+    _paint.color = color!;
+    _paint.style = PaintingStyle.fill;
+    canvas.drawPath(_cachedPath, _paint);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
+    if (oldDelegate is _CustomWavePainter) {
+      return oldDelegate.wavePhaseValue != wavePhaseValue;
+    }
     return false;
   }
 
