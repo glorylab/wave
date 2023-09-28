@@ -42,7 +42,7 @@ static const _heightPercentages = [
 
 WaveWidget(
     config: CustomConfig(
-        colors: colors,
+        colors: _colors,
         durations: _durations,
         heightPercentages: _heightPercentages,
     ),
