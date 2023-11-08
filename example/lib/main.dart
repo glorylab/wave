@@ -125,15 +125,17 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                       'https://images.unsplash.com/photo-1554779147-a2a22d816042?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3540',
                     ),
                     fit: BoxFit.cover,
-                    colorFilter:
-                        ColorFilter.mode(Colors.white, BlendMode.softLight),
+                    colorFilter: ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.softLight,
+                    ),
                   ),
                   config: CustomConfig(
                     colors: [
                       Colors.pink[400]!,
                       Colors.pink[300]!,
                       Colors.pink[200]!,
-                      Colors.pink[100]!
+                      Colors.pink[100]!,
                     ],
                     durations: [18000, 8000, 5000, 12000],
                     heightPercentages: [0.85, 0.86, 0.88, 0.90],
@@ -187,29 +189,28 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 88,
-                ),
+                const SizedBox(height: 88),
                 Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          'icons/ic_glory_lab.png',
-                          package: 'web3_icons',
-                          width: 32.0,
-                          height: 32.0,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'icons/ic_glory_lab.png',
+                        package: 'web3_icons',
+                        width: 32.0,
+                        height: 32.0,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Made in Glory Lab',
+                        style: TextStyle(
+                          color: Colors.grey[500],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Made in Glory Lab',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                          ),
-                        )
-                      ],
-                    )),
+                      )
+                    ],
+                  ),
+                ),
                 SizedBox(
                   height: 48,
                   child: WaveWidget(
