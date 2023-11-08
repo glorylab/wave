@@ -142,17 +142,18 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                   ),
                 ),
                 _buildCard(
-                    config: CustomConfig(
-                      colors: [
-                        Colors.white70,
-                        Colors.white54,
-                        Colors.white30,
-                        Colors.white24,
-                      ],
-                      durations: [32000, 21000, 18000, 5000],
-                      heightPercentages: [0.25, 0.26, 0.28, 0.31],
-                    ),
-                    backgroundColor: Colors.blue[600]),
+                  config: CustomConfig(
+                    colors: [
+                      Colors.white70,
+                      Colors.white54,
+                      Colors.white30,
+                      Colors.white24,
+                    ],
+                    durations: [32000, 21000, 18000, 5000],
+                    heightPercentages: [0.25, 0.26, 0.28, 0.31],
+                  ),
+                  backgroundColor: Colors.blue[600],
+                ),
                 Align(
                   child: Container(
                     height: 128,
@@ -182,14 +183,17 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                             0.66,
                           ],
                         ),
-                        backgroundColor: const Color(0xFFF15BB5),
+                        // backgroundColor: const Color(0xFFF15BB5),
+                        // backgroundColor: Colors.green,
                         size: const Size(double.infinity, double.infinity),
                         waveAmplitude: 0,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 88),
+                const SizedBox(
+                  height: 88,
+                ),
                 Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(16),

@@ -217,6 +217,7 @@ class WaveWidget extends StatefulWidget {
   final Color? backgroundColor;
   final DecorationImage? backgroundImage;
   final bool isLoop;
+  final Widget? widget;
 
   WaveWidget({
     required this.config,
@@ -229,6 +230,7 @@ class WaveWidget extends StatefulWidget {
     this.backgroundColor,
     this.backgroundImage,
     this.isLoop = true,
+    this.widget,
   });
 
   @override
@@ -290,12 +292,17 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   }
 
   _buildPaints() {
-    List<Widget> paints = [];
+    List<Widget> paints = [
+      if (widget.child != null) widget.child,
+    ];
     if (widget.config.colorMode == ColorMode.custom) {
-      List<Color>? _colors = (widget.config as CustomConfig).colors;
-      List<List<Color>>? _gradients = (widget.config as CustomConfig).gradients;
-      Alignment? begin = (widget.config as CustomConfig).gradientBegin;
-      Alignment? end = (widget.config as CustomConfig).gradientEnd;
+      final cconfig = widget.config as CustomConfig;
+
+      List<Color>? _colors = cconfig.colors;
+      List<List<Color>>? _gradients = cconfig.gradients;
+      Alignment? begin = cconfig.gradientBegin;
+      Alignment? end = cconfig.gradientEnd;
+
       for (int i = 0; i < _wavePhaseValues.length; i++) {
         paints.add(
           Container(
@@ -306,13 +313,12 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
                 gradient: _gradients == null ? null : _gradients[i],
                 gradientBegin: begin,
                 gradientEnd: end,
-                heightPercentage:
-                    (widget.config as CustomConfig).heightPercentages![i],
+                heightPercentage: cconfig.heightPercentages![i],
                 repaint: _waveControllers[i],
                 waveFrequency: widget.waveFrequency,
                 wavePhaseValue: _wavePhaseValues[i],
                 waveAmplitude: _waveAmplitudes[i],
-                blur: (widget.config as CustomConfig).blur,
+                blur: cconfig.blur,
               ),
               size: widget.size,
             ),
@@ -396,19 +402,19 @@ class _CustomWavePainter extends CustomPainter {
   double viewWidth = 0.0;
   Paint _paint = Paint();
 
-  _CustomWavePainter(
-      {this.colorMode,
-      this.color,
-      this.gradient,
-      this.gradientBegin,
-      this.gradientEnd,
-      this.blur,
-      this.heightPercentage,
-      this.waveFrequency,
-      this.wavePhaseValue,
-      this.waveAmplitude,
-      Listenable? repaint})
-      : super(repaint: repaint);
+  _CustomWavePainter({
+    this.colorMode,
+    this.color,
+    this.gradient,
+    this.gradientBegin,
+    this.gradientEnd,
+    this.blur,
+    this.heightPercentage,
+    this.waveFrequency,
+    this.wavePhaseValue,
+    this.waveAmplitude,
+    Listenable? repaint,
+  }) : super(repaint: repaint);
 
   _setPaths(double viewCenterY, Size size, Canvas canvas) {
     Layer _layer = Layer(
