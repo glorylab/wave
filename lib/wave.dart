@@ -245,7 +245,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   Map<Animation<double>, AnimationController>? valueList;
   Timer? _endAnimationTimer;
 
-  _initAnimations() {
+  void _initAnimations() {
     if (widget.config.colorMode == ColorMode.custom) {
       _waveControllers =
           (widget.config as CustomConfig).durations!.map((duration) {
@@ -291,7 +291,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     }
   }
 
-  _buildPaints() {
+  List<Widget> _buildPaints() {
     List<Widget> paints = [
       if (widget.child != null) widget.child,
     ];
@@ -305,23 +305,21 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
       for (int i = 0; i < _wavePhaseValues.length; i++) {
         paints.add(
-          Container(
-            child: CustomPaint(
-              painter: _CustomWavePainter(
-                colorMode: widget.config.colorMode,
-                color: _colors == null ? null : _colors[i],
-                gradient: _gradients == null ? null : _gradients[i],
-                gradientBegin: begin,
-                gradientEnd: end,
-                heightPercentage: cconfig.heightPercentages![i],
-                repaint: _waveControllers[i],
-                waveFrequency: widget.waveFrequency,
-                wavePhaseValue: _wavePhaseValues[i],
-                waveAmplitude: _waveAmplitudes[i],
-                blur: cconfig.blur,
-              ),
-              size: widget.size,
+          CustomPaint(
+            painter: _CustomWavePainter(
+              colorMode: widget.config.colorMode,
+              color: _colors == null ? null : _colors[i],
+              gradient: _gradients == null ? null : _gradients[i],
+              gradientBegin: begin,
+              gradientEnd: end,
+              heightPercentage: cconfig.heightPercentages![i],
+              repaint: _waveControllers[i],
+              waveFrequency: widget.waveFrequency,
+              wavePhaseValue: _wavePhaseValues[i],
+              waveAmplitude: _waveAmplitudes[i],
+              blur: cconfig.blur,
             ),
+            size: widget.size,
           ),
         );
       }
@@ -329,7 +327,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     return paints;
   }
 
-  _disposeAnimations() {
+  void _disposeAnimations() {
     _waveControllers.forEach((controller) {
       controller.dispose();
     });
