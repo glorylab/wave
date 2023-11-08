@@ -301,6 +301,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
           Container(
             child: CustomPaint(
               painter: _CustomWavePainter(
+                colorMode: widget.config.colorMode,
                 color: _colors == null ? null : _colors[i],
                 gradient: _gradients == null ? null : _gradients[i],
                 gradientBegin: begin,
@@ -464,12 +465,13 @@ class _CustomWavePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 
   double _getSinY(
-      double startradius, double waveFrequency, int currentposition) {
+    double startradius,
+    double waveFrequency,
+    int currentposition,
+  ) {
     if (_tempA == 0) {
       _tempA = pi / viewWidth;
     }
@@ -477,7 +479,8 @@ class _CustomWavePainter extends CustomPainter {
       _tempB = 2 * pi / 360.0;
     }
 
-    return (sin(
-        _tempA * waveFrequency * (currentposition + 1) + startradius * _tempB));
+    return sin(
+      _tempA * waveFrequency * (currentposition + 1) + startradius * _tempB,
+    );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
 
 enum ColorMode {
@@ -17,11 +15,6 @@ abstract class Config {
   final ColorMode? colorMode;
 
   Config({this.colorMode});
-
-  static void throwNullError(String colorModeStr, String configStr) {
-    throw FlutterError(
-        'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
-  }
 }
 
 class CustomConfig extends Config {
@@ -43,7 +36,7 @@ class CustomConfig extends Config {
     this.blur,
   })  : assert(() {
           if (colors == null && gradients == null) {
-            Config.throwNullError('custom', 'colors` or `gradients');
+            throwNullError('custom', 'colors` or `gradients');
           }
           return true;
         }()),
@@ -51,19 +44,20 @@ class CustomConfig extends Config {
           if (gradients == null &&
               (gradientBegin != null || gradientEnd != null)) {
             throw FlutterError(
-                'You set a gradient direction but forgot setting `gradients`.');
+              'You set a gradient direction but forgot setting `gradients`.',
+            );
           }
           return true;
         }()),
         assert(() {
           if (durations == null) {
-            Config.throwNullError('custom', 'durations');
+            throwNullError('custom', 'durations');
           }
           return true;
         }()),
         assert(() {
           if (heightPercentages == null) {
-            Config.throwNullError('custom', 'heightPercentages');
+            throwNullError('custom', 'heightPercentages');
           }
           return true;
         }()),
@@ -82,14 +76,17 @@ class CustomConfig extends Config {
         assert(colors == null || gradients == null,
             'Cannot provide both colors and gradients.'),
         super(colorMode: ColorMode.custom);
+
+  static void throwNullError(String colorModeStr, String configStr) {
+    throw FlutterError(
+        'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
+  }
 }
 
-/// todo
 class RandomConfig extends Config {
   RandomConfig() : super(colorMode: ColorMode.random);
 }
 
-/// todo
 class SingleConfig extends Config {
   SingleConfig() : super(colorMode: ColorMode.single);
 }
