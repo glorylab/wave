@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-void main() => runApp(WaveDemoApp());
+void main() => runApp(const WaveDemoApp());
 
-final String appName = 'Demo WAVE';
-final String repoURL = 'https://github.com/glorylab/wave';
+const String appName = 'Demo WAVE';
+const String repoURL = 'https://github.com/glorylab/wave';
 
 class WaveDemoApp extends StatelessWidget {
+  const WaveDemoApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,42 +19,48 @@ class WaveDemoApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         useMaterial3: true,
       ),
-      home: WaveDemoHomePage(title: appName),
+      home: const WaveDemoHomePage(title: appName),
     );
   }
 }
 
 class WaveDemoHomePage extends StatefulWidget {
-  WaveDemoHomePage({Key? key, this.title}) : super(key: key);
+  const WaveDemoHomePage({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
   @override
-  _WaveDemoHomePageState createState() => _WaveDemoHomePageState();
+  WaveDemoHomePageState createState() => WaveDemoHomePageState();
 }
 
-class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
-  _buildCard({
+class WaveDemoHomePageState extends State<WaveDemoHomePage> {
+  WaveDemoHomePageState();
+
+  Widget _buildCard({
     required Config config,
     Color? backgroundColor = Colors.transparent,
     DecorationImage? backgroundImage,
     double height = 152.0,
   }) {
-    return Container(
+    return SizedBox(
       height: height,
       width: double.infinity,
       child: Card(
         elevation: 12.0,
         margin: EdgeInsets.only(
-            right: marginHorizontal, left: marginHorizontal, bottom: 16.0),
+          right: marginHorizontal,
+          left: marginHorizontal,
+          bottom: 16.0,
+        ),
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        ),
         child: WaveWidget(
           config: config,
           backgroundColor: backgroundColor,
           backgroundImage: backgroundImage,
-          size: Size(double.infinity, double.infinity),
+          size: const Size(double.infinity, double.infinity),
           waveAmplitude: 0,
         ),
       ),
@@ -95,15 +102,15 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
           Expanded(
             child: ListView(
               children: <Widget>[
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 _buildCard(
                   backgroundColor: Colors.purpleAccent,
                   config: CustomConfig(
                     gradients: [
-                      [Colors.red, Color(0xEEF44336)],
-                      [Colors.red[800]!, Color(0x77E57373)],
-                      [Colors.orange, Color(0x66FF9800)],
-                      [Colors.yellow, Color(0x55FFEB3B)]
+                      const [Colors.red, Color(0xEEF44336)],
+                      [Colors.red[800]!, const Color(0x77E57373)],
+                      const [Colors.orange, Color(0x66FF9800)],
+                      const [Colors.yellow, Color(0x55FFEB3B)]
                     ],
                     durations: [35000, 19440, 10800, 6000],
                     heightPercentages: [0.20, 0.23, 0.25, 0.30],
@@ -113,7 +120,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                 ),
                 _buildCard(
                   height: 256.0,
-                  backgroundImage: DecorationImage(
+                  backgroundImage: const DecorationImage(
                     image: NetworkImage(
                       'https://images.unsplash.com/photo-1554779147-a2a22d816042?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3540',
                     ),
@@ -149,7 +156,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                     height: 128,
                     width: 128,
                     decoration:
-                        BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                        const BoxDecoration(shape: BoxShape.circle, boxShadow: [
                       BoxShadow(
                         color: Color(0xFF9B5DE5),
                         blurRadius: 2.0,
@@ -161,8 +168,8 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                       child: WaveWidget(
                         config: CustomConfig(
                           colors: [
-                            Color(0xFFFEE440),
-                            Color(0xFF00BBF9),
+                            const Color(0xFFFEE440),
+                            const Color(0xFF00BBF9),
                           ],
                           durations: [
                             5000,
@@ -173,8 +180,8 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                             0.66,
                           ],
                         ),
-                        backgroundColor: Color(0xFFF15BB5),
-                        size: Size(double.infinity, double.infinity),
+                        backgroundColor: const Color(0xFFF15BB5),
+                        size: const Size(double.infinity, double.infinity),
                         waveAmplitude: 0,
                       ),
                     ),
@@ -197,13 +204,13 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                         const SizedBox(height: 8),
                         Text(
                           'Made in Glory Lab',
-                          style: GoogleFonts.robotoMono(
+                          style: TextStyle(
                             color: Colors.grey[500],
                           ),
                         )
                       ],
                     )),
-                Container(
+                SizedBox(
                   height: 48,
                   child: WaveWidget(
                     config: CustomConfig(
@@ -216,7 +223,7 @@ class _WaveDemoHomePageState extends State<WaveDemoHomePage> {
                       durations: [18000, 8000, 5000, 12000],
                       heightPercentages: [0.65, 0.66, 0.68, 0.70],
                     ),
-                    size: Size(double.infinity, double.infinity),
+                    size: const Size(double.infinity, double.infinity),
                     waveAmplitude: 0,
                   ),
                 ),

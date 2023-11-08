@@ -20,8 +20,6 @@ dependencies:
   wave:
     path: ../
 
-  web3_icons: ^0.0.8
-  google_fonts: ^4.0.3
   url_launcher: ^6.1.10
 
 dev_dependencies:
