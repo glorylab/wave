@@ -41,28 +41,26 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
     Color? backgroundColor = Colors.transparent,
     DecorationImage? backgroundImage,
     double height = 152.0,
+    Widget? child,
   }) {
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: Card(
-        elevation: 12.0,
-        margin: EdgeInsets.only(
-          right: marginHorizontal,
-          left: marginHorizontal,
-          bottom: 16.0,
-        ),
-        clipBehavior: Clip.antiAlias,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-        ),
-        child: WaveWidget(
-          config: config,
-          backgroundColor: backgroundColor,
-          backgroundImage: backgroundImage,
-          size: const Size(double.infinity, double.infinity),
-          waveAmplitude: 0,
-        ),
+    return Card(
+      elevation: 12.0,
+      margin: EdgeInsets.only(
+        right: marginHorizontal,
+        left: marginHorizontal,
+        bottom: 16.0,
+      ),
+      clipBehavior: Clip.antiAlias,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+      ),
+      child: WaveWidget(
+        config: config,
+        backgroundColor: backgroundColor,
+        backgroundImage: backgroundImage,
+        size: Size(double.infinity, height),
+        waveAmplitude: 0,
+        child: child,
       ),
     );
   }
@@ -116,6 +114,47 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                     heightPercentages: [0.20, 0.23, 0.25, 0.30],
                     gradientBegin: Alignment.bottomLeft,
                     gradientEnd: Alignment.topRight,
+                  ),
+                ),
+                _buildCard(
+                  config: CustomConfig(
+                    gradients: const [
+                      [
+                        Color.fromARGB(243, 255, 153, 0),
+                        Color(0x66FF9800),
+                      ],
+                      [
+                        Color.fromARGB(100, 0, 255, 0),
+                        Color(0xa6FF0000),
+                      ],
+                    ],
+                    durations: [3000, 6000],
+                    heightPercentages: [0.025, 0.3],
+                    gradientBegin: Alignment.bottomLeft,
+                    gradientEnd: Alignment.topRight,
+                  ),
+                  height: 100,
+                  child: const Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'FALA AI',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Custom config',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 _buildCard(

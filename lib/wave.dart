@@ -217,7 +217,7 @@ class WaveWidget extends StatefulWidget {
   final Color? backgroundColor;
   final DecorationImage? backgroundImage;
   final bool isLoop;
-  final Widget? widget;
+  final Widget? child;
 
   WaveWidget({
     required this.config,
@@ -230,7 +230,7 @@ class WaveWidget extends StatefulWidget {
     this.backgroundColor,
     this.backgroundImage,
     this.isLoop = true,
-    this.widget,
+    this.child,
   });
 
   @override
@@ -257,12 +257,14 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
       _wavePhaseValues = _waveControllers.map((controller) {
         CurvedAnimation _curve =
             CurvedAnimation(parent: controller, curve: Curves.easeInOut);
+
         Animation<double> value = Tween(
           begin: widget.wavePhase,
           end: 360 + widget.wavePhase,
         ).animate(
           _curve,
         );
+
         value.addStatusListener((status) {
           switch (status) {
             case AnimationStatus.completed:
@@ -292,9 +294,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   }
 
   List<Widget> _buildPaints() {
-    List<Widget> paints = [
-      if (widget.child != null) widget.child,
-    ];
+    List<Widget> paints = [];
     if (widget.config.colorMode == ColorMode.custom) {
       final cconfig = widget.config as CustomConfig;
 
@@ -319,6 +319,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
               waveAmplitude: _waveAmplitudes[i],
               blur: cconfig.blur,
             ),
+            child: widget.child,
             size: widget.size,
           ),
         );
@@ -411,10 +412,10 @@ class _CustomWavePainter extends CustomPainter {
     this.waveFrequency,
     this.wavePhaseValue,
     this.waveAmplitude,
-    Listenable? repaint,
+    required Listenable repaint,
   }) : super(repaint: repaint);
 
-  _setPaths(double viewCenterY, Size size, Canvas canvas) {
+  void _setPaths(double viewCenterY, Size size, Canvas canvas) {
     Layer _layer = Layer(
       path: Path(),
       color: color,
