@@ -208,7 +208,7 @@ import 'package:wave/config.dart';
 
 class WaveWidget extends StatefulWidget {
   final Config config;
-  final Size size;
+  final Size? size;
   final double waveAmplitude;
   final double wavePhase;
   final double waveFrequency;
@@ -217,11 +217,12 @@ class WaveWidget extends StatefulWidget {
   final Color? backgroundColor;
   final DecorationImage? backgroundImage;
   final bool isLoop;
+  final bool repeat;
   final Widget? child;
 
   WaveWidget({
     required this.config,
-    required this.size,
+    this.size,
     this.waveAmplitude = 20.0,
     this.wavePhase = 10.0,
     this.waveFrequency = 1.6,
@@ -230,8 +231,9 @@ class WaveWidget extends StatefulWidget {
     this.backgroundColor,
     this.backgroundImage,
     this.isLoop = true,
+    this.repeat = false,
     this.child,
-  });
+  }) : assert(child != null || size != null, "child or size must be not null");
 
   @override
   State<StatefulWidget> createState() => _WaveWidgetState();
@@ -240,10 +242,31 @@ class WaveWidget extends StatefulWidget {
 class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   late List<AnimationController> _waveControllers;
   late List<Animation<double>> _wavePhaseValues;
+  static final rand = Random();
 
   List<double> _waveAmplitudes = [];
   Map<Animation<double>, AnimationController>? valueList;
   Timer? _endAnimationTimer;
+
+  @override
+  void didUpdateWidget(covariant WaveWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.config != widget.config ||
+        oldWidget.size != widget.size ||
+        oldWidget.waveAmplitude != widget.waveAmplitude ||
+        oldWidget.wavePhase != widget.wavePhase ||
+        oldWidget.waveFrequency != widget.waveFrequency ||
+        oldWidget.heightPercentage != widget.heightPercentage ||
+        oldWidget.duration != widget.duration ||
+        oldWidget.backgroundColor != widget.backgroundColor ||
+        oldWidget.backgroundImage != widget.backgroundImage ||
+        oldWidget.isLoop != widget.isLoop ||
+        oldWidget.repeat != widget.repeat ||
+        oldWidget.child != widget.child) {
+      _disposeAnimations();
+      _initAnimations();
+    }
+  }
 
   void _initAnimations() {
     if (widget.config.colorMode == ColorMode.custom) {
@@ -251,12 +274,17 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
           (widget.config as CustomConfig).durations!.map((duration) {
         _waveAmplitudes.add(widget.waveAmplitude + 10);
         return AnimationController(
-            vsync: this, duration: Duration(milliseconds: duration));
+          vsync: this,
+          duration: Duration(milliseconds: duration),
+          value: rand.nextDouble(),
+        );
       }).toList();
 
       _wavePhaseValues = _waveControllers.map((controller) {
-        CurvedAnimation _curve =
-            CurvedAnimation(parent: controller, curve: Curves.easeInOut);
+        CurvedAnimation _curve = CurvedAnimation(
+          parent: controller,
+          curve: Curves.easeInOut,
+        );
 
         Animation<double> value = Tween(
           begin: widget.wavePhase,
@@ -268,7 +296,9 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         value.addStatusListener((status) {
           switch (status) {
             case AnimationStatus.completed:
-              controller.reverse();
+              controller.value = 0;
+              controller.forward();
+
               break;
             case AnimationStatus.dismissed:
               controller.forward();
@@ -320,7 +350,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
               blur: cconfig.blur,
             ),
             child: widget.child,
-            size: widget.size,
+            size: widget.size ?? Size.zero,
           ),
         );
       }

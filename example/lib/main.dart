@@ -101,19 +101,42 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
             child: ListView(
               children: <Widget>[
                 const SizedBox(height: 16.0),
-                _buildCard(
-                  backgroundColor: Colors.purpleAccent,
+                WaveWidget(
+                  backgroundColor: Colors.white,
+                  isLoop: true,
+                  repeat: false,
+                  wavePhase: 200,
                   config: CustomConfig(
                     gradients: [
-                      const [Colors.red, Color(0xEEF44336)],
-                      [Colors.red[800]!, const Color(0x77E57373)],
-                      const [Colors.orange, Color(0x66FF9800)],
-                      const [Colors.yellow, Color(0x55FFEB3B)]
+                      [
+                        Colors.green.withOpacity(.17),
+                        Colors.green.withOpacity(.47),
+                      ]
                     ],
-                    durations: [35000, 19440, 10800, 6000],
-                    heightPercentages: [0.20, 0.23, 0.25, 0.30],
-                    gradientBegin: Alignment.bottomLeft,
-                    gradientEnd: Alignment.topRight,
+                    gradientBegin: Alignment.center,
+                    gradientEnd: Alignment.bottomCenter,
+                    durations: [8000],
+                    heightPercentages: [.45],
+                  ),
+                  size: const Size(double.infinity, double.infinity),
+                  waveAmplitude: 0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.green,
+                        strokeAlign: BorderSide.strokeAlignInside,
+                        width: 2,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Container(
+                        color: Colors.red,
+                        width: double.infinity,
+                        height: 80,
+                      ),
+                    ),
                   ),
                 ),
                 _buildCard(
