@@ -197,15 +197,17 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                   child: Container(
                     height: 128,
                     width: 128,
-                    decoration:
-                        const BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF9B5DE5),
-                        blurRadius: 2.0,
-                        spreadRadius: -5.0,
-                        offset: Offset(0.0, 8.0),
-                      ),
-                    ]),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF9B5DE5),
+                          blurRadius: 2.0,
+                          spreadRadius: -5.0,
+                          offset: Offset(0.0, 8.0),
+                        ),
+                      ],
+                    ),
                     child: ClipOval(
                       child: WaveWidget(
                         config: CustomConfig(
@@ -213,14 +215,8 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                             const Color(0xFFFEE440),
                             const Color(0xFF00BBF9),
                           ],
-                          durations: [
-                            5000,
-                            4000,
-                          ],
-                          heightPercentages: [
-                            0.65,
-                            0.66,
-                          ],
+                          durations: [5000, 4000],
+                          heightPercentages: [.65, .66],
                         ),
                         // backgroundColor: const Color(0xFFF15BB5),
                         // backgroundColor: Colors.green,

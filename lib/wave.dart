@@ -466,6 +466,7 @@ class _CustomWavePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double viewCenterY = size.height * (heightPercentage! + 0.1);
     viewWidth = size.width;
+
     _setPaths(viewCenterY, size, canvas);
   }
 
