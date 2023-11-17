@@ -217,36 +217,106 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                   backgroundColor: Colors.blue[600],
                 ),
                 Align(
-                  child: Container(
-                    height: 128,
-                    width: 128,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF9B5DE5),
-                          blurRadius: 2.0,
-                          spreadRadius: -5.0,
-                          offset: Offset(0.0, 8.0),
-                        ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: WaveWidget(
-                        config: CustomConfig(
-                          colors: [
-                            const Color(0xFFFEE440),
-                            const Color(0xFF00BBF9),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 128,
+                        width: 128,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF9B5DE5),
+                              blurRadius: 2.0,
+                              spreadRadius: -5.0,
+                              offset: Offset(0.0, 8.0),
+                            ),
                           ],
-                          durations: [5000, 4000],
-                          heightPercentages: [.65, .66],
                         ),
-                        // backgroundColor: const Color(0xFFF15BB5),
-                        // backgroundColor: Colors.green,
-                        size: const Size(double.infinity, double.infinity),
-                        waveAmplitude: 0,
+                        child: ClipOval(
+                          child: WaveWidget(
+                            config: CustomConfig(
+                              colors: const [
+                                Color(0xFFFEE440),
+                                Color.fromARGB(148, 0, 187, 249),
+                                Color.fromARGB(255, 22, 255, 22),
+                              ],
+                              durations: [5000, 5000, 5000],
+                              heightPercentages: [.45, .55, .65],
+                            ),
+                            initialAnimationValue: 0,
+                            curve: Curves.easeInOutSine,
+                            size: const Size(double.infinity, double.infinity),
+                            waveAmplitude: 0,
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        height: 128,
+                        width: 128,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF9B5DE5),
+                              blurRadius: 2.0,
+                              spreadRadius: -5.0,
+                              offset: Offset(0.0, 8.0),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: WaveWidget(
+                            config: CustomConfig(
+                              colors: const [
+                                Color(0xFFFEE440),
+                                Color.fromARGB(148, 0, 187, 249),
+                                Color.fromARGB(255, 22, 255, 22),
+                              ],
+                              durations: [5000, 5000, 5000],
+                              heightPercentages: [.45, .55, .65],
+                            ),
+                            initialAnimationValue: .33,
+                            curve: Curves.easeInOutSine,
+                            size: const Size(double.infinity, double.infinity),
+                            waveAmplitude: 5,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 128,
+                        width: 128,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF9B5DE5),
+                              blurRadius: 2.0,
+                              spreadRadius: -5.0,
+                              offset: Offset(0.0, 8.0),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: WaveWidget(
+                            config: CustomConfig(
+                              colors: const [
+                                Color(0xFFFEE440),
+                                Color.fromARGB(148, 0, 187, 249),
+                                Color.fromARGB(255, 22, 255, 22),
+                              ],
+                              durations: [5000, 5000, 5000],
+                              heightPercentages: [.45, .55, .65],
+                            ),
+                            initialAnimationValue: .66,
+                            curve: Curves.easeInOutSine,
+                            size: const Size(double.infinity, double.infinity),
+                            waveAmplitude: 5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
