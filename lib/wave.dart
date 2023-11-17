@@ -210,6 +210,7 @@ class WaveWidget extends StatefulWidget {
   final Config config;
   final Size? size;
   final double waveAmplitude;
+  final Curve? curve;
   final double wavePhase;
   final double waveFrequency;
   final double heightPercentage;
@@ -219,6 +220,9 @@ class WaveWidget extends StatefulWidget {
   final bool isLoop;
   final bool repeat;
   final Widget? child;
+
+  ///A value between 0 and 1 that indicates the progress of the animation.
+  final double? initialAnimationValue;
 
   WaveWidget({
     required this.config,
@@ -232,8 +236,15 @@ class WaveWidget extends StatefulWidget {
     this.backgroundImage,
     this.isLoop = true,
     this.repeat = false,
+    this.curve,
+    this.initialAnimationValue,
     this.child,
-  }) : assert(child != null || size != null, "child or size must be not null");
+  })  : assert(child != null || size != null, "child or size must be not null"),
+        assert(
+          initialAnimationValue == null ||
+              (initialAnimationValue >= 0.0 && initialAnimationValue <= 1.0),
+          "initialAnimationValue must be between 0.0 and 1.0",
+        );
 
   @override
   State<StatefulWidget> createState() => _WaveWidgetState();
@@ -262,6 +273,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         oldWidget.backgroundImage != widget.backgroundImage ||
         oldWidget.isLoop != widget.isLoop ||
         oldWidget.repeat != widget.repeat ||
+        oldWidget.curve != widget.curve ||
         oldWidget.child != widget.child) {
       _disposeAnimations();
       _initAnimations();
@@ -276,14 +288,14 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         return AnimationController(
           vsync: this,
           duration: Duration(milliseconds: duration),
-          value: rand.nextDouble(),
+          value: widget.initialAnimationValue ?? rand.nextDouble(),
         );
       }).toList();
 
       _wavePhaseValues = _waveControllers.map((controller) {
         CurvedAnimation _curve = CurvedAnimation(
           parent: controller,
-          curve: Curves.easeInOut,
+          curve: widget.curve ?? Curves.easeInOut,
         );
 
         Animation<double> value = Tween(
