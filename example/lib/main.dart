@@ -353,7 +353,7 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                         Colors.indigo[400]!,
                         Colors.indigo[300]!,
                         Colors.indigo[200]!,
-                        Colors.indigo[100]!
+                        Colors.indigo[100]!,
                       ],
                       durations: [18000, 8000, 5000, 12000],
                       heightPercentages: [0.65, 0.66, 0.68, 0.70],
