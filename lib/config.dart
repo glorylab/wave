@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 enum ColorMode {
@@ -16,12 +15,22 @@ enum ColorMode {
 abstract class Config {
   final ColorMode? colorMode;
 
-  Config({this.colorMode});
+  Config({
+    this.colorMode,
+  });
 
-  static void throwNullError(String colorModeStr, String configStr) {
-    throw FlutterError(
-        'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
+  @override
+  String toString() => 'Config(colorMode: $colorMode)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Config && other.colorMode == colorMode;
   }
+
+  @override
+  int get hashCode => colorMode.hashCode;
 }
 
 class CustomConfig extends Config {
@@ -43,7 +52,7 @@ class CustomConfig extends Config {
     this.blur,
   })  : assert(() {
           if (colors == null && gradients == null) {
-            Config.throwNullError('custom', 'colors` or `gradients');
+            throwNullError('custom', 'colors` or `gradients');
           }
           return true;
         }()),
@@ -51,19 +60,20 @@ class CustomConfig extends Config {
           if (gradients == null &&
               (gradientBegin != null || gradientEnd != null)) {
             throw FlutterError(
-                'You set a gradient direction but forgot setting `gradients`.');
+              'You set a gradient direction but forgot setting `gradients`.',
+            );
           }
           return true;
         }()),
         assert(() {
           if (durations == null) {
-            Config.throwNullError('custom', 'durations');
+            throwNullError('custom', 'durations');
           }
           return true;
         }()),
         assert(() {
           if (heightPercentages == null) {
-            Config.throwNullError('custom', 'heightPercentages');
+            throwNullError('custom', 'heightPercentages');
           }
           return true;
         }()),
@@ -82,14 +92,67 @@ class CustomConfig extends Config {
         assert(colors == null || gradients == null,
             'Cannot provide both colors and gradients.'),
         super(colorMode: ColorMode.custom);
+
+  static void throwNullError(String colorModeStr, String configStr) {
+    throw FlutterError(
+        'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
+  }
+
+  CustomConfig copyWith({
+    List<Color>? colors,
+    List<List<Color>>? gradients,
+    Alignment? gradientBegin,
+    Alignment? gradientEnd,
+    List<int>? durations,
+    List<double>? heightPercentages,
+    MaskFilter? blur,
+  }) {
+    return CustomConfig(
+      colors: colors ?? this.colors,
+      gradients: gradients ?? this.gradients,
+      gradientBegin: gradientBegin ?? this.gradientBegin,
+      gradientEnd: gradientEnd ?? this.gradientEnd,
+      durations: durations ?? this.durations,
+      heightPercentages: heightPercentages ?? this.heightPercentages,
+      blur: blur ?? this.blur,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'CustomConfig(colors: $colors, gradients: $gradients, gradientBegin: $gradientBegin, gradientEnd: $gradientEnd, durations: $durations, heightPercentages: $heightPercentages, blur: $blur)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CustomConfig &&
+        listEquals(other.colors, colors) &&
+        listEquals(other.gradients, gradients) &&
+        other.gradientBegin == gradientBegin &&
+        other.gradientEnd == gradientEnd &&
+        listEquals(other.durations, durations) &&
+        listEquals(other.heightPercentages, heightPercentages) &&
+        other.blur == blur;
+  }
+
+  @override
+  int get hashCode {
+    return colors.hashCode ^
+        gradients.hashCode ^
+        gradientBegin.hashCode ^
+        gradientEnd.hashCode ^
+        durations.hashCode ^
+        heightPercentages.hashCode ^
+        blur.hashCode;
+  }
 }
 
-/// todo
 class RandomConfig extends Config {
   RandomConfig() : super(colorMode: ColorMode.random);
 }
 
-/// todo
 class SingleConfig extends Config {
   SingleConfig() : super(colorMode: ColorMode.single);
 }
