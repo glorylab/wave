@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wave/flutter_wave.dart';
 
 enum ColorMode {
   /// Waves with *single* **color** but different **alpha** and **amplitude**.
@@ -41,6 +42,7 @@ class CustomConfig extends Config {
   final List<int>? durations;
   final List<double>? heightPercentages;
   final MaskFilter? blur;
+  final List<StrokeData?>? enabledStrokes;
 
   CustomConfig({
     this.colors,
@@ -50,6 +52,7 @@ class CustomConfig extends Config {
     required this.durations,
     required this.heightPercentages,
     this.blur,
+    this.enabledStrokes,
   })  : assert(() {
           if (colors == null && gradients == null) {
             throwNullError('custom', 'colors` or `gradients');
@@ -91,6 +94,12 @@ class CustomConfig extends Config {
         }()),
         assert(colors == null || gradients == null,
             'Cannot provide both colors and gradients.'),
+        assert(
+          enabledStrokes == null ||
+              enabledStrokes.length == colors?.length ||
+              enabledStrokes.length == gradients?.length,
+          'Length of `enabledStrokes` must be equal to length of `colors` or `gradients`.',
+        ),
         super(colorMode: ColorMode.custom);
 
   static void throwNullError(String colorModeStr, String configStr) {
@@ -106,6 +115,7 @@ class CustomConfig extends Config {
     List<int>? durations,
     List<double>? heightPercentages,
     MaskFilter? blur,
+    List<StrokeData?>? enabledStrokes,
   }) {
     return CustomConfig(
       colors: colors ?? this.colors,
@@ -115,12 +125,13 @@ class CustomConfig extends Config {
       durations: durations ?? this.durations,
       heightPercentages: heightPercentages ?? this.heightPercentages,
       blur: blur ?? this.blur,
+      enabledStrokes: enabledStrokes ?? this.enabledStrokes,
     );
   }
 
   @override
   String toString() {
-    return 'CustomConfig(colors: $colors, gradients: $gradients, gradientBegin: $gradientBegin, gradientEnd: $gradientEnd, durations: $durations, heightPercentages: $heightPercentages, blur: $blur)';
+    return 'CustomConfig(colors: $colors, gradients: $gradients, gradientBegin: $gradientBegin, gradientEnd: $gradientEnd, durations: $durations, heightPercentages: $heightPercentages, blur: $blur, enabledStrokes: $enabledStrokes)';
   }
 
   @override
@@ -134,7 +145,8 @@ class CustomConfig extends Config {
         other.gradientEnd == gradientEnd &&
         listEquals(other.durations, durations) &&
         listEquals(other.heightPercentages, heightPercentages) &&
-        other.blur == blur;
+        other.blur == blur &&
+        listEquals(other.enabledStrokes, enabledStrokes);
   }
 
   @override
@@ -145,7 +157,8 @@ class CustomConfig extends Config {
         gradientEnd.hashCode ^
         durations.hashCode ^
         heightPercentages.hashCode ^
-        blur.hashCode;
+        blur.hashCode ^
+        enabledStrokes.hashCode;
   }
 }
 

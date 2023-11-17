@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
+import 'package:wave/flutter_wave.dart';
 
 void main() => runApp(const WaveDemoApp());
 
@@ -298,22 +297,25 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                             ),
                           ],
                         ),
-                        child: ClipOval(
-                          child: WaveWidget(
-                            config: CustomConfig(
-                              colors: const [
-                                Color(0xFFFEE440),
-                                Color.fromARGB(148, 0, 187, 249),
-                                Color.fromARGB(255, 22, 255, 22),
-                              ],
-                              durations: [5000, 5000, 5000],
-                              heightPercentages: [.45, .55, .65],
-                            ),
-                            initialAnimationValue: .66,
-                            curve: Curves.easeInOutSine,
-                            size: const Size(double.infinity, double.infinity),
-                            waveAmplitude: 5,
+                        child: WaveWidget(
+                          config: CustomConfig(
+                            enabledStrokes: const [
+                              StrokeData(color: Colors.red, width: 2),
+                              StrokeData(color: Colors.purple, width: 2),
+                              null,
+                            ],
+                            colors: const [
+                              Color(0xFFFEE440),
+                              Color.fromARGB(148, 0, 187, 249),
+                              Color.fromARGB(255, 22, 255, 22),
+                            ],
+                            durations: [5000, 5000, 5000],
+                            heightPercentages: [.45, .55, .65],
                           ),
+                          initialAnimationValue: .66,
+                          curve: Curves.easeInOutSine,
+                          size: const Size(double.infinity, double.infinity),
+                          waveAmplitude: 5,
                         ),
                       ),
                     ],
@@ -351,7 +353,7 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                         Colors.indigo[400]!,
                         Colors.indigo[300]!,
                         Colors.indigo[200]!,
-                        Colors.indigo[100]!
+                        Colors.indigo[100]!,
                       ],
                       durations: [18000, 8000, 5000, 12000],
                       heightPercentages: [0.65, 0.66, 0.68, 0.70],
