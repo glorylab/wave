@@ -300,7 +300,7 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                         child: WaveWidget(
                           config: CustomConfig(
                             enabledStrokes: const [
-                              null,
+                              StrokeData(color: Colors.red, width: 2),
                               StrokeData(color: Colors.purple, width: 2),
                               null,
                             ],
