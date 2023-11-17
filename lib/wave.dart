@@ -203,7 +203,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 
 class WaveWidget extends StatefulWidget {
@@ -360,6 +360,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
               wavePhaseValue: _wavePhaseValues[i],
               waveAmplitude: _waveAmplitudes[i],
               blur: cconfig.blur,
+              strokeColor: cconfig.enabledStrokes?[i],
             ),
             child: widget.child,
             size: widget.size ?? Size.zero,
@@ -429,6 +430,7 @@ class _CustomWavePainter extends CustomPainter {
   final Alignment? gradientBegin;
   final Alignment? gradientEnd;
   final MaskFilter? blur;
+  final Color? strokeColor;
 
   double? waveAmplitude;
 
@@ -454,6 +456,7 @@ class _CustomWavePainter extends CustomPainter {
     this.waveFrequency,
     this.wavePhaseValue,
     this.waveAmplitude,
+    required this.strokeColor,
     required Listenable repaint,
   }) : super(repaint: repaint);
 
@@ -482,6 +485,7 @@ class _CustomWavePainter extends CustomPainter {
     _layer.path!.lineTo(size.width, size.height);
     _layer.path!.lineTo(0.0, size.height);
     _layer.path!.close();
+
     if (_layer.color != null) {
       _paint.color = _layer.color!;
     }
@@ -502,6 +506,33 @@ class _CustomWavePainter extends CustomPainter {
 
     _paint.style = PaintingStyle.fill;
     canvas.drawPath(_layer.path!, _paint);
+
+    if (strokeColor == null) return;
+    final strokePath = getStrokePath(viewCenterY, size, _layer);
+
+    final paint = Paint()
+      ..color = strokeColor!
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawPath(strokePath, paint);
+  }
+
+  Path getStrokePath(double viewCenterY, Size size, Layer layer) {
+    final path = Path()
+      ..moveTo(
+        0.0,
+        viewCenterY +
+            layer.amplitude! * _getSinY(layer.phase!, waveFrequency!, -1),
+      );
+    for (int i = 1; i < size.width + 1; i++) {
+      path.lineTo(
+          i.toDouble(),
+          viewCenterY +
+              layer.amplitude! * _getSinY(layer.phase!, waveFrequency!, i));
+    }
+
+    return path;
   }
 
   @override
