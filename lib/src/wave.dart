@@ -204,7 +204,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wave/config.dart';
+import 'package:wave/flutter_wave.dart';
 
 class WaveWidget extends StatefulWidget {
   final Config config;
@@ -360,7 +360,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
               wavePhaseValue: _wavePhaseValues[i],
               waveAmplitude: _waveAmplitudes[i],
               blur: cconfig.blur,
-              strokeColor: cconfig.enabledStrokes?[i],
+              strokeData: cconfig.enabledStrokes?[i],
             ),
             child: widget.child,
             size: widget.size ?? Size.zero,
@@ -430,7 +430,7 @@ class _CustomWavePainter extends CustomPainter {
   final Alignment? gradientBegin;
   final Alignment? gradientEnd;
   final MaskFilter? blur;
-  final Color? strokeColor;
+  final StrokeData? strokeData;
 
   double? waveAmplitude;
 
@@ -456,7 +456,7 @@ class _CustomWavePainter extends CustomPainter {
     this.waveFrequency,
     this.wavePhaseValue,
     this.waveAmplitude,
-    required this.strokeColor,
+    required this.strokeData,
     required Listenable repaint,
   }) : super(repaint: repaint);
 
@@ -507,11 +507,11 @@ class _CustomWavePainter extends CustomPainter {
     _paint.style = PaintingStyle.fill;
     canvas.drawPath(_layer.path!, _paint);
 
-    if (strokeColor == null) return;
+    if (strokeData == null) return;
     final strokePath = getStrokePath(viewCenterY, size, _layer);
 
     final paint = Paint()
-      ..color = strokeColor!
+      ..color = strokeData!.color
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wave/flutter_wave.dart';
 
 enum ColorMode {
   /// Waves with *single* **color** but different **alpha** and **amplitude**.
@@ -41,7 +42,7 @@ class CustomConfig extends Config {
   final List<int>? durations;
   final List<double>? heightPercentages;
   final MaskFilter? blur;
-  final List<Color?>? enabledStrokes;
+  final List<StrokeData?>? enabledStrokes;
 
   CustomConfig({
     this.colors,
@@ -114,7 +115,7 @@ class CustomConfig extends Config {
     List<int>? durations,
     List<double>? heightPercentages,
     MaskFilter? blur,
-    List<Color?>? enabledStrokes,
+    List<StrokeData?>? enabledStrokes,
   }) {
     return CustomConfig(
       colors: colors ?? this.colors,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
+import 'package:wave/flutter_wave.dart';
 
 void main() => runApp(const WaveDemoApp());
 
@@ -300,7 +299,11 @@ class WaveDemoHomePageState extends State<WaveDemoHomePage> {
                         ),
                         child: WaveWidget(
                           config: CustomConfig(
-                            enabledStrokes: [null, Colors.pink, null],
+                            enabledStrokes: const [
+                              null,
+                              StrokeData(color: Colors.purple, width: 2),
+                              null,
+                            ],
                             colors: const [
                               Color(0xFFFEE440),
                               Color.fromARGB(148, 0, 187, 249),
