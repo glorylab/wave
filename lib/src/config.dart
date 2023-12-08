@@ -185,15 +185,32 @@ class CustomConfig extends Config {
       }
     }
 
-    return other is CustomConfig &&
+    final r = other is CustomConfig &&
         listEquals(other.colors, colors) &&
         gradientsAreEqual &&
         other.gradientBegin == gradientBegin &&
         other.gradientEnd == gradientEnd &&
         listEquals(other.durations, durations) &&
-        listEquals(other.heightPercentages, heightPercentages) &&
+        heightsAreEqual &&
         other.blur == blur &&
         listEquals(other.enabledStrokes, enabledStrokes);
+
+    if (r) {
+      if (other is CustomConfig) {
+        print('colors: ${listEquals(other.colors, colors)}');
+        print('gradients: $gradientsAreEqual');
+        print('gradientBegin: ${other.gradientBegin == gradientBegin}');
+        print('gradientEnd: ${other.gradientEnd == gradientEnd}');
+        print('durations: ${listEquals(other.durations, durations)}');
+        print(
+            'heightPercentages: ${listEquals(other.heightPercentages, heightPercentages)}');
+        print('blur: ${other.blur == blur}');
+        print(
+            'enabledStrokes: ${listEquals(other.enabledStrokes, enabledStrokes)}');
+      }
+    }
+
+    return r;
   }
 
   @override
