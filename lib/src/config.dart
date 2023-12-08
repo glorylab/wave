@@ -140,7 +140,27 @@ class CustomConfig extends Config {
 
     if (other is CustomConfig) {
       print('colors: ${listEquals(other.colors, colors)}');
+
+      bool areEqual = true;
+
+      if (other.gradients?.length != gradients?.length) {
+        areEqual = false;
+      } else {
+        if (other.gradients != null && gradients != null) {
+          for (int i = 0; i < gradients!.length; i++) {
+            final l1 = other.gradients![i];
+            final l2 = gradients![i];
+            print('l1: $l1');
+            if (!listEquals(l1, l2)) {
+              areEqual = false;
+              break;
+            }
+          }
+        }
+      }
+
       print('gradients: ${listEquals(other.gradients, gradients)}');
+      print('Gradients are equal: $areEqual');
       print('gradientBegin: ${other.gradientBegin == gradientBegin}');
       print('gradientEnd: ${other.gradientEnd == gradientEnd}');
       print('durations: ${listEquals(other.durations, durations)}');
