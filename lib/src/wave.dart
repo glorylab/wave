@@ -276,8 +276,21 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         oldWidget.curve != widget.curve ||
         oldWidget.child != widget.child) {
       ///Print the values that have changed
-      if (oldWidget.config != widget.config)
-        print("config changed ${oldWidget.config} -> ${widget.config}");
+      if (oldWidget.config != widget.config) {
+        final oc = oldWidget.config as CustomConfig;
+        final c = widget.config as CustomConfig;
+        print('colors: ' + (oc.colors != c.colors).toString());
+        print('gradients: ' + (oc.gradients != c.gradients).toString());
+        print('gradientBegin: ' +
+            (oc.gradientBegin != c.gradientBegin).toString());
+        print('gradientEnd: ' + (oc.gradientEnd != c.gradientEnd).toString());
+        print('durations: ' + (oc.durations != c.durations).toString());
+        print('heightPercentages: ' +
+            (oc.heightPercentages != c.heightPercentages).toString());
+        print('blur: ' + (oc.blur != c.blur).toString());
+        print('enabledStrokes: ' +
+            (oc.enabledStrokes != c.enabledStrokes).toString());
+      }
 
       if (oldWidget.size != widget.size)
         print("size changed ${oldWidget.size} -> ${widget.size}");
@@ -318,8 +331,9 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
       if (oldWidget.curve != widget.curve)
         print("curve changed ${oldWidget.curve} -> ${widget.curve}");
 
-      if (oldWidget.child != widget.child)
+      if (oldWidget.child != widget.child) {
         print("child changed ${oldWidget.child} -> ${widget.child}");
+      }
 
       _disposeAnimations();
       _initAnimations();
