@@ -138,6 +138,19 @@ class CustomConfig extends Config {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
+    if (other is CustomConfig) {
+      print('colors: ${listEquals(other.colors, colors)}');
+      print('gradients: ${listEquals(other.gradients, gradients)}');
+      print('gradientBegin: ${other.gradientBegin == gradientBegin}');
+      print('gradientEnd: ${other.gradientEnd == gradientEnd}');
+      print('durations: ${listEquals(other.durations, durations)}');
+      print(
+          'heightPercentages: ${listEquals(other.heightPercentages, heightPercentages)}');
+      print('blur: ${other.blur == blur}');
+      print(
+          'enabledStrokes: ${listEquals(other.enabledStrokes, enabledStrokes)}');
+    }
+
     return other is CustomConfig &&
         listEquals(other.colors, colors) &&
         listEquals(other.gradients, gradients) &&
