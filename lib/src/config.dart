@@ -138,13 +138,13 @@ class CustomConfig extends Config {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
+    bool gradientsAreEqual = true;
+
     if (other is CustomConfig) {
       print('colors: ${listEquals(other.colors, colors)}');
 
-      bool areEqual = true;
-
       if (other.gradients?.length != gradients?.length) {
-        areEqual = false;
+        gradientsAreEqual = false;
       } else {
         if (other.gradients != null && gradients != null) {
           for (int i = 0; i < gradients!.length; i++) {
@@ -152,15 +152,14 @@ class CustomConfig extends Config {
             final l2 = gradients![i];
             print('l1: $l1');
             if (!listEquals(l1, l2)) {
-              areEqual = false;
+              gradientsAreEqual = false;
               break;
             }
           }
         }
       }
 
-      print('gradients: ${listEquals(other.gradients, gradients)}');
-      print('Gradients are equal: $areEqual');
+      print('Gradients are equal: $gradientsAreEqual');
       print('gradientBegin: ${other.gradientBegin == gradientBegin}');
       print('gradientEnd: ${other.gradientEnd == gradientEnd}');
       print('durations: ${listEquals(other.durations, durations)}');
@@ -173,7 +172,7 @@ class CustomConfig extends Config {
 
     return other is CustomConfig &&
         listEquals(other.colors, colors) &&
-        listEquals(other.gradients, gradients) &&
+        gradientsAreEqual &&
         other.gradientBegin == gradientBegin &&
         other.gradientEnd == gradientEnd &&
         listEquals(other.durations, durations) &&
