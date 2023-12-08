@@ -139,6 +139,7 @@ class CustomConfig extends Config {
     if (identical(this, other)) return true;
 
     bool gradientsAreEqual = true;
+    bool heightsAreEqual = true;
 
     if (other is CustomConfig) {
       print('colors: ${listEquals(other.colors, colors)}');
@@ -159,12 +160,29 @@ class CustomConfig extends Config {
         }
       }
 
+      if (other.heightPercentages?.length != heightPercentages?.length) {
+        heightsAreEqual = false;
+      } else {
+        if (other.heightPercentages != null && heightPercentages != null) {
+          for (int i = 0; i < heightPercentages!.length; i++) {
+            final l1 = other.heightPercentages![i];
+            final l2 = heightPercentages![i];
+            print('l1: $l1');
+
+            final diff = (l1 - l2).abs();
+            if (l1 != l2 && diff > 0.0001) {
+              heightsAreEqual = false;
+              break;
+            }
+          }
+        }
+      }
+
       print('Gradients are equal: $gradientsAreEqual');
       print('gradientBegin: ${other.gradientBegin == gradientBegin}');
       print('gradientEnd: ${other.gradientEnd == gradientEnd}');
       print('durations: ${listEquals(other.durations, durations)}');
-      print(
-          'heightPercentages: ${listEquals(other.heightPercentages, heightPercentages)}');
+      print('heightPercentages: $heightsAreEqual');
       print('blur: ${other.blur == blur}');
       print(
           'enabledStrokes: ${listEquals(other.enabledStrokes, enabledStrokes)}');
