@@ -170,7 +170,7 @@ class CustomConfig extends Config {
             print('l1: $l1');
 
             final diff = (l1 - l2).abs();
-            if (l1 != l2 && diff > 0.0001) {
+            if (l1 != l2 && diff > 0.001) {
               heightsAreEqual = false;
               break;
             }
