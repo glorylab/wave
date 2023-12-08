@@ -274,56 +274,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         oldWidget.isLoop != widget.isLoop ||
         oldWidget.repeat != widget.repeat ||
         oldWidget.curve != widget.curve) {
-      ///Print the values that have changed
-      if (oldWidget.config != widget.config) {
-        print("config changed ${oldWidget.config} -> ${widget.config}");
-      }
-
-      if (oldWidget.size != widget.size)
-        print("size changed ${oldWidget.size} -> ${widget.size}");
-
-      if (oldWidget.waveAmplitude != widget.waveAmplitude)
-        print(
-            "waveAmplitude changed ${oldWidget.waveAmplitude} -> ${widget.waveAmplitude}");
-
-      if (oldWidget.wavePhase != widget.wavePhase)
-        print(
-            "wavePhase changed ${oldWidget.wavePhase} -> ${widget.wavePhase}");
-
-      if (oldWidget.waveFrequency != widget.waveFrequency)
-        print(
-            "waveFrequency changed ${oldWidget.waveFrequency} -> ${widget.waveFrequency}");
-
-      if (oldWidget.heightPercentage != widget.heightPercentage)
-        print(
-            "heightPercentage changed ${oldWidget.heightPercentage} -> ${widget.heightPercentage}");
-
-      if (oldWidget.duration != widget.duration)
-        print("duration changed ${oldWidget.duration} -> ${widget.duration}");
-
-      if (oldWidget.backgroundColor != widget.backgroundColor)
-        print(
-            "backgroundColor changed ${oldWidget.backgroundColor} -> ${widget.backgroundColor}");
-
-      if (oldWidget.backgroundImage != widget.backgroundImage)
-        print(
-            "backgroundImage changed ${oldWidget.backgroundImage} -> ${widget.backgroundImage}");
-
-      if (oldWidget.isLoop != widget.isLoop)
-        print("isLoop changed ${oldWidget.isLoop} -> ${widget.isLoop}");
-
-      if (oldWidget.repeat != widget.repeat)
-        print("repeat changed ${oldWidget.repeat} -> ${widget.repeat}");
-
-      if (oldWidget.curve != widget.curve)
-        print("curve changed ${oldWidget.curve} -> ${widget.curve}");
-
       _disposeAnimations();
       _initAnimations();
-    }
-
-    if (oldWidget.child != widget.child) {
-      print("Child changed ${oldWidget.child} -> ${widget.child}");
     }
   }
 
