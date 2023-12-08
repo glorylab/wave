@@ -195,7 +195,7 @@ class CustomConfig extends Config {
         other.blur == blur &&
         listEquals(other.enabledStrokes, enabledStrokes);
 
-    if (r) {
+    if (!r) {
       if (other is CustomConfig) {
         print('colors: ${listEquals(other.colors, colors)}');
         print('gradients: $gradientsAreEqual');
