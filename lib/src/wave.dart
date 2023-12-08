@@ -281,15 +281,20 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         final c = widget.config as CustomConfig;
         print('colors: ' + (oc.colors != c.colors).toString());
         print('gradients: ' + (oc.gradients != c.gradients).toString());
-        print('gradientBegin: ' +
-            (oc.gradientBegin != c.gradientBegin).toString());
+        print(
+          'gradientBegin: ' + (oc.gradientBegin != c.gradientBegin).toString(),
+        );
         print('gradientEnd: ' + (oc.gradientEnd != c.gradientEnd).toString());
         print('durations: ' + (oc.durations != c.durations).toString());
-        print('heightPercentages: ' +
-            (oc.heightPercentages != c.heightPercentages).toString());
+        print(
+          'heightPercentages: ' +
+              (oc.heightPercentages != c.heightPercentages).toString(),
+        );
         print('blur: ' + (oc.blur != c.blur).toString());
-        print('enabledStrokes: ' +
-            (oc.enabledStrokes != c.enabledStrokes).toString());
+        print(
+          'enabledStrokes: ' +
+              (oc.enabledStrokes != c.enabledStrokes).toString(),
+        );
       }
 
       if (oldWidget.size != widget.size)
