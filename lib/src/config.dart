@@ -167,7 +167,6 @@ class CustomConfig extends Config {
           for (int i = 0; i < heightPercentages!.length; i++) {
             final l1 = other.heightPercentages![i];
             final l2 = heightPercentages![i];
-            print('l1: $l1');
 
             final diff = (l1 - l2).abs();
             if (l1 != l2 && diff > 0.001) {
@@ -178,14 +177,12 @@ class CustomConfig extends Config {
         }
       }
 
-      print('Gradients are equal: $gradientsAreEqual');
-      print('gradientBegin: ${other.gradientBegin == gradientBegin}');
-      print('gradientEnd: ${other.gradientEnd == gradientEnd}');
-      print('durations: ${listEquals(other.durations, durations)}');
-      print('heightPercentages: $heightsAreEqual');
-      print('blur: ${other.blur == blur}');
-      print(
-          'enabledStrokes: ${listEquals(other.enabledStrokes, enabledStrokes)}');
+      if (!gradientsAreEqual) {
+        print('Gradients are equal: $gradientsAreEqual');
+      }
+      if (!heightsAreEqual) {
+        print('Heights are equal: $heightsAreEqual');
+      }
     }
 
     return other is CustomConfig &&

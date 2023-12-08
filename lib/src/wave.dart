@@ -273,8 +273,7 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
         oldWidget.backgroundImage != widget.backgroundImage ||
         oldWidget.isLoop != widget.isLoop ||
         oldWidget.repeat != widget.repeat ||
-        oldWidget.curve != widget.curve ||
-        oldWidget.child != widget.child) {
+        oldWidget.curve != widget.curve) {
       ///Print the values that have changed
       if (oldWidget.config != widget.config) {
         print("config changed ${oldWidget.config} -> ${widget.config}");
@@ -319,12 +318,12 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
       if (oldWidget.curve != widget.curve)
         print("curve changed ${oldWidget.curve} -> ${widget.curve}");
 
-      if (oldWidget.child != widget.child) {
-        print("child changed ${oldWidget.child} -> ${widget.child}");
-      }
-
       _disposeAnimations();
       _initAnimations();
+    }
+
+    if (oldWidget.child != widget.child) {
+      print("Child changed ${oldWidget.child} -> ${widget.child}");
     }
   }
 
