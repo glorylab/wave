@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
 void main() {

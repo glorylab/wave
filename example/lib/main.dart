@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
 void main() => runApp(WaveDemoApp());
