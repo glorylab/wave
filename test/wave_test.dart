@@ -70,6 +70,38 @@ void main() {
 
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets('renders issue 53 long-duration high-amplitude waves',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(getWaveWidget(
+        config: issue53Config(),
+        waveAmplitude: 180,
+        waveFrequency: 1,
+      ));
+
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('updates wave amplitude at runtime',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(getWaveWidget(
+        config: SingleConfig(),
+        waveAmplitude: 8,
+      ));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      await tester.pumpWidget(getWaveWidget(
+        config: SingleConfig(),
+        waveAmplitude: 24,
+      ));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      expect(tester.takeException(), isNull);
+    });
   });
 }
 
@@ -77,9 +109,13 @@ Widget getWaveWidget({
   Config? config,
   int? duration,
   bool isLoop = true,
+  double waveAmplitude = 5.0,
+  double waveFrequency = 1.6,
 }) {
   return MaterialApp(
-    home: Container(
+    home: SizedBox(
+      width: 1440,
+      height: 300,
       child: WaveWidget(
         backgroundColor: Colors.white,
         config: config ??
@@ -102,8 +138,24 @@ Widget getWaveWidget({
           double.infinity,
           double.infinity,
         ),
-        waveAmplitude: 5.0,
+        waveAmplitude: waveAmplitude,
+        waveFrequency: waveFrequency,
       ),
     ),
+  );
+}
+
+Config issue53Config() {
+  return CustomConfig(
+    gradients: [
+      [Colors.white, Colors.white, Colors.white],
+      const [Color(0xFF3EA894), Color(0xFF00BAB9), Color(0xFF42B58D)],
+      const [Color(0xFFBEFED2), Color(0xFF39DBB1), Color(0xFF00CDA3)],
+      const [Color(0xFF3EA894), Color(0xFF00BAB9), Color(0xFF42B58D)],
+    ],
+    durations: [43000, 43000, 45000, 45000],
+    heightPercentages: [0.55, 0.552, 0.90, 0.91],
+    gradientBegin: Alignment.centerRight,
+    gradientEnd: Alignment.centerLeft,
   );
 }
