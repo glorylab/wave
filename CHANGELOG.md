@@ -1,11 +1,14 @@
 # CHANGELOG
 
-## 0.2.4-dev.1
+## 0.2.4
 
 * Expand Dart SDK compatibility to allow Dart 3.
 * Add CI coverage for both Flutter 3.7.12 and the latest stable Flutter.
 * Avoid deprecated color opacity APIs on current Flutter.
 * Add dartdoc coverage for the main public API.
+* Replace the reusable publish workflow with Node 24 compatible publish steps.
+* Expand README usage guidance with minimal examples, parameter tables, and common errors.
+* Refresh the example app with a Material 3 generator, live performance metrics, and copyable code output.
 
 ## 0.2.3
 

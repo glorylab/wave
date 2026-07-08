@@ -8,11 +8,31 @@ on:
 
 jobs:
   publish:
+    name: Publish to pub.dev
     permissions:
       contents: read
       id-token: write
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    with:
-      # Specify the github actions deployment environment
-      environment: pub.dev
-      # working-directory: path/to/package/within/repository
+    runs-on: ubuntu-latest
+    environment: pub.dev
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Dart OIDC
+        uses: dart-lang/setup-dart@v1
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.7.12"
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Publish - dry run
+        run: dart pub publish --dry-run
+
+      - name: Publish to pub.dev
+        run: dart pub publish --force

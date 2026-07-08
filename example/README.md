@@ -1,14 +1,20 @@
-# Wave
+# Wave Generator Example
 
-<img src='https://github.com/glorylab/wave/blob/master/assets/wave_banner.png?raw=true' width="1000" height="auto" alt="Flutter package: tm - WAVE" />
+This example is an interactive generator for the `wave` package.
 
----
+Use the controls to adjust:
 
-[![Awesome: Flutter](https://img.shields.io/badge/⌐◨─◨-AwesomeFlutter-blue.svg?logo=flutter&longCache=true&style=flat-square)](https://github.com/Solido/awesome-flutter#effect) 
-[![Pub](https://img.shields.io/pub/v/wave.svg?logo=flutter&style=flat-square)](https://pub.dev/packages/wave)
-![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?longCache=true&style=flat-square)
+- config mode: `SingleConfig`, seeded `RandomConfig`, or `CustomConfig`
+- palette
+- layer count
+- wave height
+- amplitude
+- animation speed
+- loop behavior
 
-A Flutter package for displaying waves.
+The preview updates immediately, and the top bar shows live frame metrics for
+the current animation. Use **Code** to inspect and copy the complete generated
+Flutter widget from a dialog.
 
 ## Demo
 
@@ -16,37 +22,9 @@ A Flutter package for displaying waves.
 | -: | -: |
 | Web | [wave.glorylab.xyz](https://wave.glorylab.xyz "The demo page of the wave package.") |
 
+## Run Locally
 
-
-## Getting Started
-
-``` Dart
-
-static const _backgroundColor = Color(0xFFF15BB5);
-
-static const _colors = [
-    Color(0xFFFEE440),
-    Color(0xFF00BBF9),
-];
-
-static const _durations = [
-    5000,
-    4000,
-];
-
-static const _heightPercentages = [
-    0.65,
-    0.66,
-];
-
-WaveWidget(
-    config: CustomConfig(
-        colors: _colors,
-        durations: _durations,
-        heightPercentages: _heightPercentages,
-    ),
-    backgroundColor: _backgroundColor,
-    size: Size(double.infinity, double.infinity),
-    waveAmplitude: 0,
-),
+```sh
+flutter pub get
+flutter run -d chrome
 ```
