@@ -5,6 +5,7 @@
 * Expand Dart SDK compatibility to allow Dart 3.
 * Add CI coverage for both Flutter 3.7.12 and the latest stable Flutter.
 * Avoid deprecated color opacity APIs on current Flutter.
+* Add dartdoc coverage for the main public API.
 
 ## 0.2.3
 
