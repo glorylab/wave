@@ -207,18 +207,40 @@ import 'package:flutter/widgets.dart';
 
 import 'config.dart';
 
+/// Paints animated wave layers with the supplied [config].
 class WaveWidget extends StatefulWidget {
+  /// Color, duration, height, and blur configuration for each wave layer.
   final Config config;
+
+  /// Fixed paint size for each wave layer.
   final Size size;
+
+  /// Base vertical amplitude of the wave path.
   final double waveAmplitude;
+
+  /// Initial phase offset for the wave path.
   final double wavePhase;
+
+  /// Horizontal frequency of the wave path.
   final double waveFrequency;
+
+  /// Default vertical offset used by the painter when a layer config does not
+  /// provide its own height percentage.
   final double heightPercentage;
+
+  /// Total animation duration in milliseconds when [isLoop] is false.
   final int? duration;
+
+  /// Background color behind the animated waves.
   final Color? backgroundColor;
+
+  /// Background image behind the animated waves.
   final DecorationImage? backgroundImage;
+
+  /// Whether wave animations repeat indefinitely.
   final bool isLoop;
 
+  /// Creates an animated wave widget.
   WaveWidget({
     required this.config,
     required this.size,

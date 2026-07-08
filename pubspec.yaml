@@ -1,6 +1,6 @@
 name: wave
 description: Widget for displaying waves with custom color, duration, floating and blur effects.
-version: 0.2.4-dev.1
+version: 0.2.4
 homepage: https://github.com/glorylab/wave
 
 environment:

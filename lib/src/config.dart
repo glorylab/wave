@@ -2,22 +2,27 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
+/// Selects how wave layer colors are generated.
 enum ColorMode {
-  /// Waves with *single* **color** but different **alpha** and **amplitude**.
+  /// Uses one base color with per-layer opacity and amplitude values.
   single,
 
-  /// Waves using *random* **color**, **alpha** and **amplitude**.
+  /// Generates random colors for each layer.
   random,
 
-  /// Waves' colors must be set, and [colors]'s length must equal with [layers]
+  /// Uses explicit colors or gradients supplied by [CustomConfig].
   custom,
 }
 
+/// Base class for wave color and layer configuration.
 abstract class Config {
+  /// The color generation mode represented by this config.
   final ColorMode? colorMode;
 
+  /// Creates a wave configuration with the selected [colorMode].
   const Config({this.colorMode});
 
+  /// Throws a consistent error for missing required config values.
   static void throwNullError(String colorModeStr, String configStr) {
     throw FlutterError(
         'When using `ColorMode.$colorModeStr`, `$configStr` must be set.');
@@ -142,15 +147,34 @@ abstract class Config {
   }
 }
 
+/// Configuration for waves with explicit per-layer colors or gradients.
 class CustomConfig extends Config {
+  /// Per-layer solid colors.
   final List<Color>? colors;
+
+  /// Per-layer gradients.
   final List<List<Color>>? gradients;
+
+  /// Alignment where each gradient begins.
   final Alignment? gradientBegin;
+
+  /// Alignment where each gradient ends.
   final Alignment? gradientEnd;
+
+  /// Per-layer animation durations in milliseconds.
   final List<int>? durations;
+
+  /// Per-layer vertical offsets, expressed as fractions from 0 to 1.
   final List<double>? heightPercentages;
+
+  /// Optional blur mask applied to each wave layer.
   final MaskFilter? blur;
 
+  /// Creates explicit wave layers from [colors] or [gradients].
+  ///
+  /// Provide exactly one of [colors] or [gradients]. The configured layer
+  /// lists must have equal lengths, and each gradient must contain at least
+  /// two colors.
   CustomConfig({
     List<Color>? colors,
     List<List<Color>>? gradients,
@@ -205,12 +229,25 @@ class CustomConfig extends Config {
   }
 }
 
+/// Configuration for waves with generated random colors.
 class RandomConfig extends Config {
+  /// Generated or supplied per-layer colors.
   final List<Color> colors;
+
+  /// Per-layer animation durations in milliseconds.
   final List<int> durations;
+
+  /// Per-layer vertical offsets, expressed as fractions from 0 to 1.
   final List<double> heightPercentages;
+
+  /// Optional blur mask applied to each wave layer.
   final MaskFilter? blur;
 
+  /// Creates randomly colored wave layers.
+  ///
+  /// Use [layers] to control the number of generated layers and [seed] for
+  /// deterministic color generation. Any supplied lists must have equal
+  /// lengths.
   RandomConfig({
     int? layers,
     int? seed,
@@ -269,13 +306,27 @@ class RandomConfig extends Config {
   }
 }
 
+/// Configuration for waves derived from one base color.
 class SingleConfig extends Config {
+  /// Base color used for every wave layer.
   final Color color;
+
+  /// Per-layer opacity values from 0 to 1.
   final List<double> opacityPercentages;
+
+  /// Per-layer animation durations in milliseconds.
   final List<int> durations;
+
+  /// Per-layer vertical offsets, expressed as fractions from 0 to 1.
   final List<double> heightPercentages;
+
+  /// Optional blur mask applied to each wave layer.
   final MaskFilter? blur;
 
+  /// Creates wave layers from a single [color].
+  ///
+  /// Use [layers] to control generated default list lengths. Any supplied
+  /// lists must have equal lengths.
   SingleConfig({
     int? layers,
     this.color = const Color(0xFF2196F3),
