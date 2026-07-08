@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.4-dev.1
+
+* Expand Dart SDK compatibility to allow Dart 3.
+* Add CI coverage for both Flutter 3.7.12 and the latest stable Flutter.
+* Avoid deprecated color opacity APIs on current Flutter.
+
 ## 0.2.3
 
 * Add runtime validation for custom gradient and layer configuration.

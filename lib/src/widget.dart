@@ -311,7 +311,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
       return List<_WaveLayerSpec>.generate(
         singleConfig.durations.length,
         (index) => _WaveLayerSpec(
-          color: singleConfig.color.withOpacity(
+          color: _colorWithOpacity(
+            singleConfig.color,
             singleConfig.opacityPercentages[index],
           ),
           duration: singleConfig.durations[index],
@@ -324,6 +325,10 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     }
 
     throw FlutterError('Unsupported or missing `ColorMode` in `config`.');
+  }
+
+  Color _colorWithOpacity(Color color, double opacity) {
+    return color.withAlpha((opacity * 255).round());
   }
 
   double _amplitudeForLayer(int index) {
