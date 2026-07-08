@@ -17,6 +17,10 @@ A Flutter package for displaying waves.
 | Web       | `master`  | [wave.glorylab.xyz](https://wave.glorylab.xyz "The demo page of the wave package.") |
 | Web       | `develop` | [dev.wave.glorylab.xyz](https://dev.wave.glorylab.xyz "The demo page of the wave package's develop branch.") |
 
+## Deployment
+
+The web demo is built from `example/` and deployed with Cloudflare Workers Static Assets. See [docs/cloudflare-workers.md](docs/cloudflare-workers.md) for the GitHub Actions and migration setup.
+
 
 
 ## Getting Started
