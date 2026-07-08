@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.2.3-dev.1
+## 0.2.3
 
 * Add runtime validation for custom gradient and layer configuration.
 * Add default rendering support for `SingleConfig` and `RandomConfig`.
