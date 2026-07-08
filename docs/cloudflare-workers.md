@@ -27,7 +27,7 @@ The workflow in `.github/workflows/deploy-workers.yml` does the following:
 3. Runs `flutter pub get` at the package root.
 4. Runs `flutter pub get` in `example/`.
 5. Builds the demo with `flutter build web --release`.
-6. Runs `wrangler deploy` through `cloudflare/wrangler-action@v3`.
+6. Runs `wrangler deploy` through `cloudflare/wrangler-action@v4`.
 
 Pull requests build the Flutter web output but do not deploy. Pushes to `master` and manual `workflow_dispatch` runs deploy to the Worker named `wave`.
 
