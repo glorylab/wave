@@ -62,3 +62,6 @@ The Worker serves `example/build/web` and falls back to `index.html` for client-
 4. Add the production custom domain in Cloudflare Workers routes/custom domains.
 5. Point the domain DNS to Cloudflare and confirm `wave.glorylab.xyz` serves the Worker.
 6. Disable the Vercel deployment after the Cloudflare route is healthy.
+7. Remove the Vercel status check from branch protection if it is marked as required.
+
+During the transition, Vercel may still run preview deployments on pull requests. Treat Vercel preview failures separately from the Cloudflare Workers workflow until the Vercel Git integration is disabled.
