@@ -2,6 +2,12 @@
   "name": "wave",
   "compatibility_date": "2026-07-08",
   "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "wave.glorylab.xyz",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./example/build/web",
     "not_found_handling": "single-page-application"

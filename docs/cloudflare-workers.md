@@ -6,6 +6,7 @@ The web demo is deployed as Cloudflare Workers Static Assets. The deployable app
 
 - The Flutter build output is static and lives at `example/build/web`.
 - `wrangler.jsonc` configures SPA fallback with `assets.not_found_handling = "single-page-application"`.
+- `wrangler.jsonc` binds the production custom domain `wave.glorylab.xyz`.
 - Workers leaves room for future `/api/*`, auth, KV, D1, R2, or other edge logic without another platform migration.
 
 ## GitHub Secrets
@@ -59,8 +60,8 @@ The Worker serves `example/build/web` and falls back to `index.html` for client-
 1. Merge this PR after the GitHub secrets are configured.
 2. Confirm the first GitHub Actions deployment succeeds.
 3. Open the Cloudflare Worker named `wave` and verify the `workers.dev` URL.
-4. Add the production custom domain in Cloudflare Workers routes/custom domains.
-5. Point the domain DNS to Cloudflare and confirm `wave.glorylab.xyz` serves the Worker.
+4. Confirm the `wave.glorylab.xyz` custom domain from `wrangler.jsonc` appears under the Worker domains/routes.
+5. Point the domain DNS to Cloudflare if it is not already proxied there, then confirm `wave.glorylab.xyz` serves the Worker.
 6. Disable the Vercel deployment after the Cloudflare route is healthy.
 7. Remove the Vercel status check from branch protection if it is marked as required.
 
