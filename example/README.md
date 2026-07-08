@@ -12,10 +12,9 @@ A Flutter package for displaying waves.
 
 ## Demo
 
-| Platform  | Branch    | URL   | 
-| -:        | -:        | -:    |
-| Web       | `master`  | [wave.glorylab.xyz](https://wave.glorylab.xyz "The demo page of the wave package.") |
-| Web       | `develop` | [dev.wave.glorylab.xyz](https://dev.wave.glorylab.xyz "The demo page of the wave package's develop branch.") |
+| Platform | URL |
+| -: | -: |
+| Web | [wave.glorylab.xyz](https://wave.glorylab.xyz "The demo page of the wave package.") |
 
 
 
@@ -42,7 +41,7 @@ static const _heightPercentages = [
 
 WaveWidget(
     config: CustomConfig(
-        colors: colors,
+        colors: _colors,
         durations: _durations,
         heightPercentages: _heightPercentages,
     ),
