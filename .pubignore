@@ -1,0 +1,13 @@
+.dart_tool/
+.fvm/
+.fvmrc
+.github/
+.idea/
+.vscode/
+
+build/
+docs/
+wrangler.jsonc
+*.iml
+
+PULL_REQUEST_TEMPLATE.md
