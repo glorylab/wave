@@ -51,3 +51,44 @@ WaveWidget(
     waveAmplitude: 0,
 ),
 ```
+
+## Config modes
+
+`CustomConfig` is the most explicit mode. Use it when you want full control over
+each wave layer's colors or gradients, duration, and height.
+
+``` Dart
+WaveWidget(
+    config: CustomConfig(
+        gradients: [
+            [Color(0xFF00BBF9), Color(0xFF9B5DE5)],
+            [Color(0xFFFEE440), Color(0xFFF15BB5)],
+        ],
+        durations: [5000, 4000],
+        heightPercentages: [0.65, 0.66],
+    ),
+    size: Size(double.infinity, double.infinity),
+)
+```
+
+`SingleConfig` creates layered waves from one color. `RandomConfig` creates
+layer colors for you, with an optional `seed` when deterministic output is
+useful for tests or demos.
+
+``` Dart
+WaveWidget(
+    config: SingleConfig(
+        color: Color(0xFF00BBF9),
+        layers: 3,
+    ),
+    size: Size(double.infinity, double.infinity),
+)
+
+WaveWidget(
+    config: RandomConfig(
+        seed: 7,
+        layers: 4,
+    ),
+    size: Size(double.infinity, double.infinity),
+)
+```

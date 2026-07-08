@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.2.3-dev.1
+
+* Add runtime validation for custom gradient and layer configuration.
+* Add default rendering support for `SingleConfig` and `RandomConfig`.
+* Improve animation lifecycle handling in `WaveWidget`.
+* Add CI coverage for analyze and tests on Flutter 3.7.
+
 ## 0.2.2
 
 Update banner.

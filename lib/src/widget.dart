@@ -204,7 +204,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
-import 'package:wave/wave.dart';
+
+import 'config.dart';
 
 class WaveWidget extends StatefulWidget {
   final Config config;
@@ -236,96 +237,143 @@ class WaveWidget extends StatefulWidget {
 }
 
 class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
-  late List<AnimationController> _waveControllers;
-  late List<Animation<double>> _wavePhaseValues;
-
-  List<double> _waveAmplitudes = [];
-  Map<Animation<double>, AnimationController>? valueList;
+  List<_WaveLayerAnimation> _layers = <_WaveLayerAnimation>[];
   Timer? _endAnimationTimer;
 
-  _initAnimations() {
-    if (widget.config.colorMode == ColorMode.custom) {
-      _waveControllers =
-          (widget.config as CustomConfig).durations!.map((duration) {
-        _waveAmplitudes.add(widget.waveAmplitude + 10);
-        return AnimationController(
-            vsync: this, duration: Duration(milliseconds: duration));
-      }).toList();
+  void _initAnimations() {
+    final specs = _buildLayerSpecs(widget.config);
+    _layers = specs.map((spec) {
+      final controller = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: spec.duration),
+      );
+      final curve = CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeInOut,
+      );
+      final phaseValue = Tween<double>(
+        begin: widget.wavePhase,
+        end: 360 + widget.wavePhase,
+      ).animate(curve);
 
-      _wavePhaseValues = _waveControllers.map((controller) {
-        CurvedAnimation _curve =
-            CurvedAnimation(parent: controller, curve: Curves.easeInOut);
-        Animation<double> value = Tween(
-          begin: widget.wavePhase,
-          end: 360 + widget.wavePhase,
-        ).animate(
-          _curve,
-        );
-        value.addStatusListener((status) {
-          switch (status) {
-            case AnimationStatus.completed:
-              controller.reverse();
-              break;
-            case AnimationStatus.dismissed:
-              controller.forward();
-              break;
-            default:
-              break;
-          }
-        });
-        controller.forward();
-        return value;
-      }).toList();
+      controller.repeat(reverse: true);
+      return _WaveLayerAnimation(
+        controller: controller,
+        phaseValue: phaseValue,
+      );
+    }).toList(growable: false);
 
-      // If isLoop is false, stop the animation after the specified duration.
-      if (!widget.isLoop) {
-        _endAnimationTimer =
-            Timer(Duration(milliseconds: widget.duration!), () {
-          for (AnimationController waveController in _waveControllers) {
-            waveController.stop();
-          }
-        });
-      }
+    if (!widget.isLoop) {
+      _endAnimationTimer = Timer(
+        Duration(milliseconds: widget.duration ?? 6000),
+        _stopAnimations,
+      );
     }
   }
 
-  _buildPaints() {
-    List<Widget> paints = [];
-    if (widget.config.colorMode == ColorMode.custom) {
-      List<Color>? _colors = (widget.config as CustomConfig).colors;
-      List<List<Color>>? _gradients = (widget.config as CustomConfig).gradients;
-      Alignment? begin = (widget.config as CustomConfig).gradientBegin;
-      Alignment? end = (widget.config as CustomConfig).gradientEnd;
-      for (int i = 0; i < _wavePhaseValues.length; i++) {
-        paints.add(
-          Container(
-            child: CustomPaint(
-              painter: _CustomWavePainter(
-                color: _colors == null ? null : _colors[i],
-                gradient: _gradients == null ? null : _gradients[i],
-                gradientBegin: begin,
-                gradientEnd: end,
-                heightPercentage:
-                    (widget.config as CustomConfig).heightPercentages![i],
-                repaint: _waveControllers[i],
-                waveFrequency: widget.waveFrequency,
-                wavePhaseValue: _wavePhaseValues[i],
-                waveAmplitude: _waveAmplitudes[i],
-                blur: (widget.config as CustomConfig).blur,
-              ),
-              size: widget.size,
-            ),
+  List<_WaveLayerSpec> _buildLayerSpecs(Config config) {
+    if (config.colorMode == ColorMode.custom) {
+      final customConfig = config as CustomConfig;
+      return List<_WaveLayerSpec>.generate(
+        customConfig.durations!.length,
+        (index) => _WaveLayerSpec(
+          color:
+              customConfig.colors == null ? null : customConfig.colors![index],
+          gradient: customConfig.gradients == null
+              ? null
+              : customConfig.gradients![index],
+          gradientBegin: customConfig.gradientBegin,
+          gradientEnd: customConfig.gradientEnd,
+          duration: customConfig.durations![index],
+          heightPercentage: customConfig.heightPercentages![index],
+          amplitude: widget.waveAmplitude + 10,
+          blur: customConfig.blur,
+        ),
+        growable: false,
+      );
+    }
+    if (config.colorMode == ColorMode.random) {
+      final randomConfig = config as RandomConfig;
+      return List<_WaveLayerSpec>.generate(
+        randomConfig.durations.length,
+        (index) => _WaveLayerSpec(
+          color: randomConfig.colors[index],
+          duration: randomConfig.durations[index],
+          heightPercentage: randomConfig.heightPercentages[index],
+          amplitude: _amplitudeForLayer(index),
+          blur: randomConfig.blur,
+        ),
+        growable: false,
+      );
+    }
+    if (config.colorMode == ColorMode.single) {
+      final singleConfig = config as SingleConfig;
+      return List<_WaveLayerSpec>.generate(
+        singleConfig.durations.length,
+        (index) => _WaveLayerSpec(
+          color: singleConfig.color.withOpacity(
+            singleConfig.opacityPercentages[index],
           ),
-        );
-      }
+          duration: singleConfig.durations[index],
+          heightPercentage: singleConfig.heightPercentages[index],
+          amplitude: _amplitudeForLayer(index),
+          blur: singleConfig.blur,
+        ),
+        growable: false,
+      );
     }
-    return paints;
+
+    throw FlutterError('Unsupported or missing `ColorMode` in `config`.');
   }
 
-  _disposeAnimations() {
-    _waveControllers.forEach((controller) {
-      controller.dispose();
-    });
+  double _amplitudeForLayer(int index) {
+    return widget.waveAmplitude + 8 + index * 2;
+  }
+
+  List<Widget> _buildPaints() {
+    final specs = _buildLayerSpecs(widget.config);
+    return _layers.asMap().entries.map((entry) {
+      final layer = entry.value;
+      final spec = specs[entry.key];
+      return CustomPaint(
+        painter: _CustomWavePainter(
+          color: spec.color,
+          gradient: spec.gradient,
+          gradientBegin: spec.gradientBegin,
+          gradientEnd: spec.gradientEnd,
+          heightPercentage: spec.heightPercentage,
+          repaint: layer.controller,
+          waveFrequency: widget.waveFrequency,
+          wavePhaseValue: layer.phaseValue,
+          waveAmplitude: spec.amplitude,
+          blur: spec.blur,
+        ),
+        size: widget.size,
+      );
+    }).toList(growable: false);
+  }
+
+  void _stopAnimations() {
+    for (final layer in _layers) {
+      layer.controller.stop();
+    }
+  }
+
+  void _disposeAnimations() {
+    _endAnimationTimer?.cancel();
+    _endAnimationTimer = null;
+    for (final layer in _layers) {
+      layer.controller.dispose();
+    }
+    _layers = <_WaveLayerAnimation>[];
+  }
+
+  bool _shouldRecreateAnimations(WaveWidget oldWidget) {
+    return oldWidget.config != widget.config ||
+        oldWidget.waveAmplitude != widget.waveAmplitude ||
+        oldWidget.wavePhase != widget.wavePhase ||
+        oldWidget.isLoop != widget.isLoop ||
+        oldWidget.duration != widget.duration;
   }
 
   @override
@@ -335,9 +383,17 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   }
 
   @override
+  void didUpdateWidget(WaveWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_shouldRecreateAnimations(oldWidget)) {
+      _disposeAnimations();
+      _initAnimations();
+    }
+  }
+
+  @override
   void dispose() {
     _disposeAnimations();
-    _endAnimationTimer?.cancel();
     super.dispose();
   }
 
@@ -353,6 +409,38 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+class _WaveLayerSpec {
+  final Color? color;
+  final List<Color>? gradient;
+  final Alignment? gradientBegin;
+  final Alignment? gradientEnd;
+  final int duration;
+  final double heightPercentage;
+  final double amplitude;
+  final MaskFilter? blur;
+
+  const _WaveLayerSpec({
+    this.color,
+    this.gradient,
+    this.gradientBegin,
+    this.gradientEnd,
+    required this.duration,
+    required this.heightPercentage,
+    required this.amplitude,
+    this.blur,
+  });
+}
+
+class _WaveLayerAnimation {
+  final AnimationController controller;
+  final Animation<double> phaseValue;
+
+  const _WaveLayerAnimation({
+    required this.controller,
+    required this.phaseValue,
+  });
 }
 
 /// Meta data of layer
@@ -375,109 +463,117 @@ class Layer {
 }
 
 class _CustomWavePainter extends CustomPainter {
-  final ColorMode? colorMode;
   final Color? color;
   final List<Color>? gradient;
   final Alignment? gradientBegin;
   final Alignment? gradientEnd;
   final MaskFilter? blur;
+  final double waveAmplitude;
+  final Animation<double> wavePhaseValue;
+  final double waveFrequency;
+  final double heightPercentage;
 
-  double? waveAmplitude;
+  final Paint _paint = Paint();
 
-  Animation<double>? wavePhaseValue;
+  _CustomWavePainter({
+    this.color,
+    this.gradient,
+    this.gradientBegin,
+    this.gradientEnd,
+    this.blur,
+    required this.heightPercentage,
+    required this.waveFrequency,
+    required this.wavePhaseValue,
+    required this.waveAmplitude,
+    Listenable? repaint,
+  }) : super(repaint: repaint);
 
-  double? waveFrequency;
-
-  double? heightPercentage;
-
-  double _tempA = 0.0;
-  double _tempB = 0.0;
-  double viewWidth = 0.0;
-  Paint _paint = Paint();
-
-  _CustomWavePainter(
-      {this.colorMode,
-      this.color,
-      this.gradient,
-      this.gradientBegin,
-      this.gradientEnd,
-      this.blur,
-      this.heightPercentage,
-      this.waveFrequency,
-      this.wavePhaseValue,
-      this.waveAmplitude,
-      Listenable? repaint})
-      : super(repaint: repaint);
-
-  _setPaths(double viewCenterY, Size size, Canvas canvas) {
-    Layer _layer = Layer(
+  void _setPaths(double viewCenterY, Size size, Canvas canvas) {
+    final layer = Layer(
       path: Path(),
       color: color,
       gradient: gradient,
       blur: blur,
-      amplitude: (-1.6 + 0.8) * waveAmplitude!,
-      phase: wavePhaseValue!.value * 2 + 30,
+      amplitude: -0.8 * waveAmplitude,
+      phase: wavePhaseValue.value * 2 + 30,
     );
 
-    _layer.path!.reset();
-    _layer.path!.moveTo(
-        0.0,
-        viewCenterY +
-            _layer.amplitude! * _getSinY(_layer.phase!, waveFrequency!, -1));
+    layer.path!.reset();
+    layer.path!.moveTo(
+      0.0,
+      viewCenterY +
+          layer.amplitude! * _getSinY(layer.phase!, waveFrequency, -1, size),
+    );
     for (int i = 1; i < size.width + 1; i++) {
-      _layer.path!.lineTo(
-          i.toDouble(),
-          viewCenterY +
-              _layer.amplitude! * _getSinY(_layer.phase!, waveFrequency!, i));
+      layer.path!.lineTo(
+        i.toDouble(),
+        viewCenterY +
+            layer.amplitude! * _getSinY(layer.phase!, waveFrequency, i, size),
+      );
     }
 
-    _layer.path!.lineTo(size.width, size.height);
-    _layer.path!.lineTo(0.0, size.height);
-    _layer.path!.close();
-    if (_layer.color != null) {
-      _paint.color = _layer.color!;
+    layer.path!.lineTo(size.width, size.height);
+    layer.path!.lineTo(0.0, size.height);
+    layer.path!.close();
+    if (layer.color != null) {
+      _paint.color = layer.color!;
+      _paint.shader = null;
     }
-    if (_layer.gradient != null) {
-      var rect = Offset.zero &
-          Size(size.width, size.height - viewCenterY * heightPercentage!);
+    if (layer.gradient != null) {
+      final rect = Offset.zero &
+          Size(size.width, size.height - viewCenterY * heightPercentage);
       _paint.shader = LinearGradient(
-              begin: gradientBegin == null
-                  ? Alignment.bottomCenter
-                  : gradientBegin!,
-              end: gradientEnd == null ? Alignment.topCenter : gradientEnd!,
-              colors: _layer.gradient!)
-          .createShader(rect);
+        begin: gradientBegin ?? Alignment.bottomCenter,
+        end: gradientEnd ?? Alignment.topCenter,
+        colors: layer.gradient!,
+      ).createShader(rect);
     }
-    if (_layer.blur != null) {
-      _paint.maskFilter = _layer.blur;
-    }
-
+    _paint.maskFilter = layer.blur;
     _paint.style = PaintingStyle.fill;
-    canvas.drawPath(_layer.path!, _paint);
+    canvas.drawPath(layer.path!, _paint);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    double viewCenterY = size.height * (heightPercentage! + 0.1);
-    viewWidth = size.width;
+    if (size.width <= 0 || size.height <= 0) {
+      return;
+    }
+    final viewCenterY = size.height * (heightPercentage + 0.1);
     _setPaths(viewCenterY, size, canvas);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(covariant _CustomWavePainter oldDelegate) {
+    return oldDelegate.color != color ||
+        !_listEquals(oldDelegate.gradient, gradient) ||
+        oldDelegate.gradientBegin != gradientBegin ||
+        oldDelegate.gradientEnd != gradientEnd ||
+        oldDelegate.blur != blur ||
+        oldDelegate.waveAmplitude != waveAmplitude ||
+        oldDelegate.waveFrequency != waveFrequency ||
+        oldDelegate.heightPercentage != heightPercentage;
   }
 
   double _getSinY(
-      double startradius, double waveFrequency, int currentposition) {
-    if (_tempA == 0) {
-      _tempA = pi / viewWidth;
-    }
-    if (_tempB == 0) {
-      _tempB = 2 * pi / 360.0;
-    }
+    double startRadius,
+    double waveFrequency,
+    int currentPosition,
+    Size size,
+  ) {
+    final scale = pi / size.width;
+    final phaseScale = 2 * pi / 360.0;
 
-    return (sin(
-        _tempA * waveFrequency * (currentposition + 1) + startradius * _tempB));
+    return sin(
+      scale * waveFrequency * (currentPosition + 1) + startRadius * phaseScale,
+    );
+  }
+
+  bool _listEquals<T>(List<T>? first, List<T>? second) {
+    if (first == null) return second == null;
+    if (second == null || first.length != second.length) return false;
+    for (int i = 0; i < first.length; i++) {
+      if (first[i] != second[i]) return false;
+    }
+    return true;
   }
 }
