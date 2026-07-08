@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* Preserve source compatibility while documenting legacy APIs.
+* Make `CustomConfig` snapshot mutable input lists like the other config modes.
+* Add regression tests for config validation, runtime config updates, and
+  deterministic seeded random colors.
+* Clarify Cloudflare deployment docs and package license attribution.
+
 ## 0.2.5
 
 * Improve `WaveWidget` paint performance for long-duration, high-amplitude

@@ -1,0 +1,12 @@
+wave
+Copyright (c) 2018 Yan Wong
+
+This package is distributed under the MIT License. See LICENSE.
+
+Portions of the wave painting implementation were adapted from
+WaveView_flutter:
+
+  https://github.com/While1true/WaveView_flutter
+
+WaveView_flutter is distributed under the Apache License, Version 2.0.
+See LICENSE-APACHE-2.0.

@@ -183,43 +183,53 @@ class CustomConfig extends Config {
     required List<int>? durations,
     required List<double>? heightPercentages,
     this.blur,
-  })  : colors = colors,
-        gradients = gradients,
-        durations = durations,
-        heightPercentages = heightPercentages,
+  })  : colors = colors == null ? null : List<Color>.unmodifiable(colors),
+        gradients = gradients == null
+            ? null
+            : List<List<Color>>.unmodifiable(
+                gradients.map<List<Color>>(
+                  (gradient) => List<Color>.unmodifiable(gradient),
+                ),
+              ),
+        durations =
+            durations == null ? null : List<int>.unmodifiable(durations),
+        heightPercentages = heightPercentages == null
+            ? null
+            : List<double>.unmodifiable(heightPercentages),
         super(colorMode: ColorMode.custom) {
-    if (colors == null && gradients == null) {
+    if (this.colors == null && this.gradients == null) {
       Config.throwNullError('custom', 'colors` or `gradients');
     }
-    if (colors != null && gradients != null) {
+    if (this.colors != null && this.gradients != null) {
       throw FlutterError('Cannot provide both `colors` and `gradients`.');
     }
-    if (durations == null) {
+    if (this.durations == null) {
       Config.throwNullError('custom', 'durations');
     }
-    if (heightPercentages == null) {
+    if (this.heightPercentages == null) {
       Config.throwNullError('custom', 'heightPercentages');
     }
-    final resolvedDurations = durations!;
-    final resolvedHeightPercentages = heightPercentages!;
+    final resolvedDurations = this.durations!;
+    final resolvedHeightPercentages = this.heightPercentages!;
     Config._resolveLayerCount(
       'CustomConfig',
-      colors: colors,
-      gradients: gradients,
+      colors: this.colors,
+      gradients: this.gradients,
       durations: resolvedDurations,
       heightPercentages: resolvedHeightPercentages,
     );
     Config._validateDurations(resolvedDurations);
     Config._validateHeightPercentages(resolvedHeightPercentages);
-    if (gradients == null && (gradientBegin != null || gradientEnd != null)) {
+    if (this.gradients == null &&
+        (gradientBegin != null || gradientEnd != null)) {
       throw FlutterError(
           'You set a gradient direction but forgot setting `gradients`.');
     }
-    if (colors != null && colors.isEmpty) {
+    if (this.colors != null && this.colors!.isEmpty) {
       throw FlutterError('`colors` must define at least one layer.');
     }
-    if (gradients != null) {
-      for (final gradient in gradients) {
+    if (this.gradients != null) {
+      for (final gradient in this.gradients!) {
         if (gradient.length < 2) {
           throw FlutterError(
               'Every gradient in `gradients` must have at least two colors.');
