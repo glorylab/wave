@@ -1,6 +1,6 @@
 name: wave_example
 description: An example application for Wave.
-homepage: https://github.com/i-protoss/wave/tree/master/example
+homepage: https://github.com/glorylab/wave/tree/master/example
 publish_to: none
 
 # The following defines the version and build number for your application.
