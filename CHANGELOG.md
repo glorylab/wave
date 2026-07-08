@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.2.5
+
+* Improve `WaveWidget` paint performance for long-duration, high-amplitude
+  wave configurations like GitHub issue #53.
+* Add a manual benchmark for the issue #53 scenario and regression coverage for
+  runtime amplitude updates.
+
 ## 0.2.4
 
 * Expand Dart SDK compatibility to allow Dart 3.

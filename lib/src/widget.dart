@@ -349,6 +349,20 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
     throw FlutterError('Unsupported or missing `ColorMode` in `config`.');
   }
 
+  List<int> _animationDurations(Config config) {
+    if (config.colorMode == ColorMode.custom) {
+      return (config as CustomConfig).durations!;
+    }
+    if (config.colorMode == ColorMode.random) {
+      return (config as RandomConfig).durations;
+    }
+    if (config.colorMode == ColorMode.single) {
+      return (config as SingleConfig).durations;
+    }
+
+    throw FlutterError('Unsupported or missing `ColorMode` in `config`.');
+  }
+
   Color _colorWithOpacity(Color color, double opacity) {
     return color.withAlpha((opacity * 255).round());
   }
@@ -396,11 +410,15 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
   }
 
   bool _shouldRecreateAnimations(WaveWidget oldWidget) {
-    return oldWidget.config != widget.config ||
-        oldWidget.waveAmplitude != widget.waveAmplitude ||
-        oldWidget.wavePhase != widget.wavePhase ||
+    if (oldWidget.wavePhase != widget.wavePhase ||
         oldWidget.isLoop != widget.isLoop ||
-        oldWidget.duration != widget.duration;
+        oldWidget.duration != widget.duration) {
+      return true;
+    }
+
+    final oldDurations = _animationDurations(oldWidget.config);
+    final durations = _animationDurations(widget.config);
+    return !_listEquals(oldDurations, durations);
   }
 
   @override
@@ -426,15 +444,25 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        image: widget.backgroundImage,
-      ),
-      child: Stack(
-        children: _buildPaints(),
+    return RepaintBoundary(
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.backgroundColor,
+          image: widget.backgroundImage,
+        ),
+        child: Stack(
+          children: _buildPaints(),
+        ),
       ),
     );
+  }
+
+  bool _listEquals<T>(List<T> first, List<T> second) {
+    if (first.length != second.length) return false;
+    for (int i = 0; i < first.length; i++) {
+      if (first[i] != second[i]) return false;
+    }
+    return true;
   }
 }
 
@@ -490,6 +518,10 @@ class Layer {
 }
 
 class _CustomWavePainter extends CustomPainter {
+  static const int _minWaveSamples = 96;
+  static const int _samplesPerFrequencyUnit = 48;
+  static const double _targetWaveSampleWidth = 4.0;
+
   final Color? color;
   final List<Color>? gradient;
   final Alignment? gradientBegin;
@@ -501,6 +533,10 @@ class _CustomWavePainter extends CustomPainter {
   final double heightPercentage;
 
   final Paint _paint = Paint();
+  final Path _path = Path();
+  Shader? _cachedGradientShader;
+  Size? _cachedGradientSize;
+  double? _cachedGradientCenterY;
 
   _CustomWavePainter({
     this.color,
@@ -515,49 +551,38 @@ class _CustomWavePainter extends CustomPainter {
     Listenable? repaint,
   }) : super(repaint: repaint);
 
-  void _setPaths(double viewCenterY, Size size, Canvas canvas) {
-    final layer = Layer(
-      path: Path(),
-      color: color,
-      gradient: gradient,
-      blur: blur,
-      amplitude: -0.8 * waveAmplitude,
-      phase: wavePhaseValue.value * 2 + 30,
+  void _paintWave(double viewCenterY, Size size, Canvas canvas) {
+    final amplitude = -0.8 * waveAmplitude;
+    final phase = wavePhaseValue.value * 2 + 30;
+    final path = _path..reset();
+    path.moveTo(
+      0.0,
+      viewCenterY + amplitude * _getSinY(phase, -1, size),
     );
 
-    layer.path!.reset();
-    layer.path!.moveTo(
-      0.0,
-      viewCenterY +
-          layer.amplitude! * _getSinY(layer.phase!, waveFrequency, -1, size),
-    );
-    for (int i = 1; i < size.width + 1; i++) {
-      layer.path!.lineTo(
-        i.toDouble(),
-        viewCenterY +
-            layer.amplitude! * _getSinY(layer.phase!, waveFrequency, i, size),
+    final sampleCount = _sampleCountForWidth(size.width);
+    final sampleWidth = size.width / sampleCount;
+    for (int i = 1; i <= sampleCount; i++) {
+      final x = i == sampleCount ? size.width : sampleWidth * i;
+      path.lineTo(
+        x,
+        viewCenterY + amplitude * _getSinY(phase, x, size),
       );
     }
 
-    layer.path!.lineTo(size.width, size.height);
-    layer.path!.lineTo(0.0, size.height);
-    layer.path!.close();
-    if (layer.color != null) {
-      _paint.color = layer.color!;
+    path.lineTo(size.width, size.height);
+    path.lineTo(0.0, size.height);
+    path.close();
+
+    if (color != null) {
+      _paint.color = color!;
       _paint.shader = null;
+    } else if (gradient != null) {
+      _paint.shader = _gradientShader(size, viewCenterY);
     }
-    if (layer.gradient != null) {
-      final rect = Offset.zero &
-          Size(size.width, size.height - viewCenterY * heightPercentage);
-      _paint.shader = LinearGradient(
-        begin: gradientBegin ?? Alignment.bottomCenter,
-        end: gradientEnd ?? Alignment.topCenter,
-        colors: layer.gradient!,
-      ).createShader(rect);
-    }
-    _paint.maskFilter = layer.blur;
+    _paint.maskFilter = blur;
     _paint.style = PaintingStyle.fill;
-    canvas.drawPath(layer.path!, _paint);
+    canvas.drawPath(path, _paint);
   }
 
   @override
@@ -566,7 +591,7 @@ class _CustomWavePainter extends CustomPainter {
       return;
     }
     final viewCenterY = size.height * (heightPercentage + 0.1);
-    _setPaths(viewCenterY, size, canvas);
+    _paintWave(viewCenterY, size, canvas);
   }
 
   @override
@@ -577,14 +602,14 @@ class _CustomWavePainter extends CustomPainter {
         oldDelegate.gradientEnd != gradientEnd ||
         oldDelegate.blur != blur ||
         oldDelegate.waveAmplitude != waveAmplitude ||
+        oldDelegate.wavePhaseValue != wavePhaseValue ||
         oldDelegate.waveFrequency != waveFrequency ||
         oldDelegate.heightPercentage != heightPercentage;
   }
 
   double _getSinY(
     double startRadius,
-    double waveFrequency,
-    int currentPosition,
+    double currentPosition,
     Size size,
   ) {
     final scale = pi / size.width;
@@ -593,6 +618,35 @@ class _CustomWavePainter extends CustomPainter {
     return sin(
       scale * waveFrequency * (currentPosition + 1) + startRadius * phaseScale,
     );
+  }
+
+  int _sampleCountForWidth(double width) {
+    final maxSamples = max(1, width.ceil());
+    final widthSamples = (width / _targetWaveSampleWidth).ceil();
+    final frequencySamples =
+        (waveFrequency.abs() * _samplesPerFrequencyUnit).ceil();
+    final requestedSamples =
+        max(_minWaveSamples, max(widthSamples, frequencySamples));
+    return min(maxSamples, requestedSamples);
+  }
+
+  Shader _gradientShader(Size size, double viewCenterY) {
+    if (_cachedGradientShader != null &&
+        _cachedGradientSize == size &&
+        _cachedGradientCenterY == viewCenterY) {
+      return _cachedGradientShader!;
+    }
+
+    final shaderHeight = max(0.0, size.height - viewCenterY * heightPercentage);
+    final rect = Offset.zero & Size(size.width, shaderHeight);
+    _cachedGradientShader = LinearGradient(
+      begin: gradientBegin ?? Alignment.bottomCenter,
+      end: gradientEnd ?? Alignment.topCenter,
+      colors: gradient!,
+    ).createShader(rect);
+    _cachedGradientSize = size;
+    _cachedGradientCenterY = viewCenterY;
+    return _cachedGradientShader!;
   }
 
   bool _listEquals<T>(List<T>? first, List<T>? second) {
