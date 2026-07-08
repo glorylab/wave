@@ -11,7 +11,7 @@ The web demo is deployed as Cloudflare Workers Static Assets. The deployable app
 
 ## GitHub Secrets
 
-Add these repository secrets before merging the deployment workflow:
+Keep these repository secrets configured:
 
 - `CLOUDFLARE_ACCOUNT_ID`: the Cloudflare account ID that owns the Worker.
 - `CLOUDFLARE_API_TOKEN`: a Cloudflare API token scoped to the account with Workers edit permission.
@@ -55,14 +55,14 @@ npx wrangler@4 deploy
 
 The Worker serves `example/build/web` and falls back to `index.html` for client-side routes.
 
-## Moving the Domain From Vercel
+## Production Checks
 
-1. Merge this PR after the GitHub secrets are configured.
-2. Confirm the first GitHub Actions deployment succeeds.
-3. Open the Cloudflare Worker named `wave` and verify the `workers.dev` URL.
-4. Confirm the `wave.glorylab.xyz` custom domain from `wrangler.jsonc` appears under the Worker domains/routes.
-5. Point the domain DNS to Cloudflare if it is not already proxied there, then confirm `wave.glorylab.xyz` serves the Worker.
-6. Disable the Vercel deployment after the Cloudflare route is healthy.
-7. Remove the Vercel status check from branch protection if it is marked as required.
+For changes that affect the demo, confirm these checks before merging:
 
-During the transition, Vercel may still run preview deployments on pull requests. Treat Vercel preview failures separately from the Cloudflare Workers workflow until the Vercel Git integration is disabled.
+1. `CI` passes for the supported Flutter matrix.
+2. `Deploy Workers Static Assets` passes on the pull request build.
+3. The push to `master` deploys successfully.
+4. `https://wave.glorylab.xyz` returns the current Flutter web app.
+
+Branch protection should require only the active CI and Cloudflare checks. Do
+not keep checks from retired deployment providers in the required check list.

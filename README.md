@@ -24,13 +24,13 @@ generated `WaveWidget` code into your app.
 
 ## Deployment
 
-The web demo is built from `example/` and deployed with Cloudflare Workers Static Assets. See [docs/cloudflare-workers.md](docs/cloudflare-workers.md) for the GitHub Actions and migration setup.
+The web demo is built from `example/` and deployed with Cloudflare Workers Static Assets. See [Cloudflare Workers deployment](https://github.com/glorylab/wave/blob/master/docs/cloudflare-workers.md) for the GitHub Actions setup.
 
 ## Install
 
 ```yaml
 dependencies:
-  wave: ^0.2.4
+  wave: ^0.2.5
 ```
 
 ## Minimal Example
@@ -135,6 +135,12 @@ WaveWidget(
 | `RandomConfig` | Fast generated palettes | `layers`, `seed`, `colors`, `durations`, `heightPercentages` |
 | `CustomConfig` | Exact colors or gradients | `colors` or `gradients`, `durations`, `heightPercentages`, `gradientBegin`, `gradientEnd` |
 
+### API compatibility
+
+Prefer per-layer `heightPercentages` on the config classes. The legacy
+`WaveWidget.heightPercentage` constructor parameter is retained for source
+compatibility, but built-in configs now define their own layer heights.
+
 ## Common Errors
 
 `CustomConfig` requires exactly one of `colors` or `gradients`.
@@ -162,3 +168,9 @@ CustomConfig(
 
 `heightPercentages` and `opacityPercentages` values must be between `0` and
 `1`, and every `duration` must be positive.
+
+## License
+
+This package is distributed under the MIT License. Portions of the wave painting
+implementation were adapted from WaveView_flutter under Apache-2.0; see
+[NOTICE](NOTICE) and [LICENSE-APACHE-2.0](LICENSE-APACHE-2.0).

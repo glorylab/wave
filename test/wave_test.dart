@@ -4,6 +4,13 @@ import 'package:wave/wave.dart';
 
 void main() {
   group('Config', () {
+    test('rejects invalid layer counts', () {
+      expect(
+        () => SingleConfig(layers: 0),
+        throwsA(isA<FlutterError>()),
+      );
+    });
+
     test('rejects mismatched custom gradient lengths', () {
       expect(
         () => CustomConfig(
@@ -28,6 +35,81 @@ void main() {
         ),
         throwsA(isA<FlutterError>()),
       );
+    });
+
+    test('rejects invalid duration, height, and opacity values', () {
+      expect(
+        () => SingleConfig(durations: [0]),
+        throwsA(isA<FlutterError>()),
+      );
+      expect(
+        () => SingleConfig(heightPercentages: [1.2]),
+        throwsA(isA<FlutterError>()),
+      );
+      expect(
+        () => SingleConfig(opacityPercentages: [-0.1]),
+        throwsA(isA<FlutterError>()),
+      );
+    });
+
+    test('snapshots mutable custom color inputs', () {
+      final colors = <Color>[Colors.red, Colors.blue];
+      final durations = <int>[1000, 2000];
+      final heightPercentages = <double>[0.2, 0.3];
+      final config = CustomConfig(
+        colors: colors,
+        durations: durations,
+        heightPercentages: heightPercentages,
+      );
+
+      colors[0] = Colors.green;
+      durations[0] = 3000;
+      heightPercentages[0] = 0.8;
+
+      expect(config.colors, [Colors.red, Colors.blue]);
+      expect(config.durations, [1000, 2000]);
+      expect(config.heightPercentages, [0.2, 0.3]);
+      expect(() => config.colors!.add(Colors.black), throwsUnsupportedError);
+      expect(() => config.durations!.add(3000), throwsUnsupportedError);
+      expect(
+        () => config.heightPercentages!.add(0.4),
+        throwsUnsupportedError,
+      );
+    });
+
+    test('snapshots mutable custom gradient inputs', () {
+      final gradients = <List<Color>>[
+        <Color>[Colors.red, Colors.blue],
+        <Color>[Colors.green, Colors.yellow],
+      ];
+      final config = CustomConfig(
+        gradients: gradients,
+        durations: [1000, 2000],
+        heightPercentages: [0.2, 0.3],
+      );
+
+      gradients[0][0] = Colors.black;
+      gradients.add(<Color>[Colors.purple, Colors.orange]);
+
+      expect(config.gradients, [
+        [Colors.red, Colors.blue],
+        [Colors.green, Colors.yellow],
+      ]);
+      expect(
+        () => config.gradients![0].add(Colors.black),
+        throwsUnsupportedError,
+      );
+      expect(
+        () => config.gradients!.add([Colors.black, Colors.white]),
+        throwsUnsupportedError,
+      );
+    });
+
+    test('generates deterministic random colors with a seed', () {
+      final first = RandomConfig(seed: 7, layers: 3);
+      final second = RandomConfig(seed: 7, layers: 3);
+
+      expect(second.colors, first.colors);
     });
   });
 
@@ -97,6 +179,46 @@ void main() {
       await tester.pumpWidget(getWaveWidget(
         config: SingleConfig(),
         waveAmplitude: 24,
+      ));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('updates config and layer count at runtime',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(getWaveWidget(
+        config: SingleConfig(layers: 2),
+      ));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      await tester.pumpWidget(getWaveWidget(
+        config: CustomConfig(
+          gradients: const [
+            [Colors.red, Colors.blue],
+            [Colors.green, Colors.yellow],
+            [Colors.purple, Colors.orange],
+          ],
+          durations: const [5000, 4000, 3000],
+          heightPercentages: const [0.2, 0.3, 0.4],
+        ),
+      ));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('updates frequency without recreating layer counts',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(getWaveWidget(
+        config: RandomConfig(seed: 7, layers: 3),
+        waveFrequency: 1,
+      ));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      await tester.pumpWidget(getWaveWidget(
+        config: RandomConfig(seed: 7, layers: 3),
+        waveFrequency: 2,
       ));
       await tester.pump(const Duration(milliseconds: 16));
 
